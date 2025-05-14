@@ -12,31 +12,31 @@ export default function DashboardPage() {
 
   return (
     <RequireAuth>
-      <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-2xl font-bold text-green-800 mb-4">Dashboard</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="border rounded-lg p-4 shadow-md">
-            <h2 className="text-lg font-bold">Total Appointments</h2>
-            <p>{stats?.totalAppointments}</p>
+          <div className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm">
+            <h2 className="text-lg font-bold text-green-800">Total Appointments</h2>
+            <p className="text-gray-800">{stats?.totalAppointments}</p>
           </div>
-          <div className="border rounded-lg p-4 shadow-md">
-            <h2 className="text-lg font-bold">Completed Appointments</h2>
-            <p>{stats?.completedAppointments}</p>
+          <div className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm">
+            <h2 className="text-lg font-bold text-green-800">Completed Appointments</h2>
+            <p className="text-gray-800">{stats?.completedAppointments}</p>
           </div>
-          <div className="border rounded-lg p-4 shadow-md">
-            <h2 className="text-lg font-bold">Upcoming Appointments</h2>
-            <p>{stats?.upcomingAppointments}</p>
+          <div className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm">
+            <h2 className="text-lg font-bold text-green-800">Upcoming Appointments</h2>
+            <p className="text-gray-800">{stats?.upcomingAppointments}</p>
           </div>
-          <div className="border rounded-lg p-4 shadow-md">
-            <h2 className="text-lg font-bold">Messages</h2>
-            <p>{stats?.messages}</p>
+          <div className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm">
+            <h2 className="text-lg font-bold text-green-800">Messages</h2>
+            <p className="text-gray-800">{stats?.messages}</p>
           </div>
         </div>
         <div className="mt-4 flex gap-4">
-          <a href="/appointment" className="px-4 py-2 bg-blue-500 text-white rounded">
+          <a href="/appointment" className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded">
             Book Appointments
           </a>
-          <a href="/chat" className="px-4 py-2 bg-green-500 text-white rounded">
+          <a href="/chat" className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded">
             Open Chat
           </a>
         </div>

@@ -15,7 +15,11 @@ const RequireAuth: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }, [user, loading, router]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <p className="text-green-800 font-bold">Loading...</p>
+      </div>
+    );
   }
 
   return <>{children}</>;

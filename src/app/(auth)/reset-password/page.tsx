@@ -36,7 +36,7 @@ export default function ResetPasswordPage() {
   return (
     <div className="container mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 gap-8">
       <div>
-        <img src="/images/auth-illustration.png" alt="Reset Password Illustration" className="rounded-lg" />
+        <img src="/mental-health-awareness.jpg" alt="Reset Password Illustration" className="rounded-lg" />
       </div>
       <div className="bg-white border border-green-600 rounded-lg p-8 shadow-lg">
         <h1 className="text-green-800 text-2xl font-bold mb-4">Reset Password</h1>

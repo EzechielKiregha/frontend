@@ -22,15 +22,15 @@ export default function AppointmentPage() {
 
   return (
     <RequireAuth>
-      <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">Appointments</h1>
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-2xl font-bold text-green-800 mb-4">Appointments</h1>
         <ul className="space-y-4">
           {appointments?.map((appointment: any) => (
-            <li key={appointment.id} className="border rounded-lg p-4 shadow-md">
-              <p>{appointment.details}</p>
+            <li key={appointment.id} className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm">
+              <p className="text-gray-800">{appointment.details}</p>
               <button
                 onClick={() => updateAppointmentStatus(appointment.id, "completed")}
-                className="mt-2 px-4 py-2 bg-green-500 text-white rounded"
+                className="mt-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded"
               >
                 Mark as Completed
               </button>
@@ -42,10 +42,10 @@ export default function AppointmentPage() {
             type="text"
             value={newAppointment}
             onChange={(e) => setNewAppointment(e.target.value)}
-            className="p-2 border rounded w-full"
+            className="p-2 border border-gray-300 rounded w-full focus:border-green-600 focus:ring-1 focus:ring-green-600"
             placeholder="New appointment details..."
           />
-          <button onClick={handleBook} className="mt-2 px-4 py-2 bg-blue-500 text-white rounded">
+          <button onClick={handleBook} className="mt-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded">
             Book Appointment
           </button>
         </div>

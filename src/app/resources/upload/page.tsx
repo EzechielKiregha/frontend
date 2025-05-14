@@ -5,7 +5,7 @@ import ResourceUploadForm from "../../../components/ResourceUploadForm";
 export default function UploadPage() {
   return (
     <RequireAuth>
-      <div className="p-4">
+      <div className="container mx-auto px-4 py-8">
         <ResourceUploadForm />
       </div>
     </RequireAuth>

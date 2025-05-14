@@ -35,10 +35,10 @@ export default function ResourceUploadForm() {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Upload Resource</h1>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
-      {success && <p className="text-green-500 mb-4">Resource uploaded successfully!</p>}
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-2xl font-bold text-green-800 mb-4">Upload Resource</h1>
+      {error && <p className="text-red-600 mb-4">{error}</p>}
+      {success && <p className="text-green-600 mb-4">Resource uploaded successfully!</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
@@ -46,7 +46,7 @@ export default function ResourceUploadForm() {
           placeholder="Title"
           value={form.title}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
+          className="w-full border border-gray-300 rounded px-3 py-2 focus:border-green-600 focus:ring-1 focus:ring-green-600"
           required
         />
         <textarea
@@ -54,7 +54,7 @@ export default function ResourceUploadForm() {
           placeholder="Content"
           value={form.content}
           onChange={(e) => setForm({ ...form, content: e.target.value })}
-          className="w-full p-2 border rounded"
+          className="w-full border border-gray-300 rounded px-3 py-2 focus:border-green-600 focus:ring-1 focus:ring-green-600"
           rows={4}
           required
         />
@@ -63,7 +63,7 @@ export default function ResourceUploadForm() {
           name="resourceType"
           value={form.resourceType}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
+          className="w-full border border-gray-300 rounded px-3 py-2 focus:border-green-600 focus:ring-1 focus:ring-green-600"
         >
           <option value="Article">Article</option>
           <option value="Video">Video</option>
@@ -72,7 +72,7 @@ export default function ResourceUploadForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full p-2 bg-blue-500 text-white rounded disabled:opacity-50"
+          className="w-full px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded disabled:opacity-50"
         >
           {loading ? "Uploading..." : "Upload"}
         </button>

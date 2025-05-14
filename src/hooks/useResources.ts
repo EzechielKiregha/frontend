@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import api from "../lib/api";
 
-interface Resource {
+export interface Resource {
   id: string;
   title: string;
   content: string;
