@@ -5,6 +5,7 @@ import RequireAuth from "../../components/RequireAuth";
 import { useAppointments } from "../../hooks/useAppointments";
 import Loader from "../../components/Loader";
 import ErrorMessage from "../../components/ErrorMessage";
+import Hero from "@/components/Hero";
 
 export default function AppointmentPage() {
   const { appointments, error, bookAppointment, updateAppointmentStatus } = useAppointments();
@@ -22,7 +23,15 @@ export default function AppointmentPage() {
 
   return (
     <RequireAuth>
-      <div className="container mx-auto px-4 py-8">
+      <Hero
+        title="Mental Health Appointments"
+        subtitle="Book and manage your mental health appointments easily."
+        imageSrc="/images/Mental-Health-consultation.jpg"
+        reverse={false}
+        ctaText="Get Started"
+        ctaLink="/appointment/#appointments"
+      />
+      <div id="appointments" className="container mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold text-green-800 mb-4">Appointments</h1>
         <ul className="space-y-4">
           {appointments?.map((appointment: any) => (

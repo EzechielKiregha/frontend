@@ -5,6 +5,7 @@ import Card from "@/components/Card";
 import Button from "@/components/Button";
 import Layout from "@/components/Layout";
 import Hero from "@/components/Hero";
+import FAQSection from "@/components/FAQSection";
 
 export default function LandingPage() {
   return (
@@ -17,13 +18,6 @@ export default function LandingPage() {
         ctaText="Get Started"
         ctaLink="/signup"
       />
-      {/* <div className="bg-gradient-to-r from-green-600 to-green-400 text-white p-8 rounded-lg text-center">
-          <h1 className="text-4xl font-bold">Empower Your Mind</h1>
-          <p className="mt-4 text-lg">
-            Connect with therapists, track your well-being, and join our supportive community.
-          </p>
-          <Button className="mt-6">Get Started</Button>
-        </div> */}
 
       {/* Features Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
@@ -64,18 +58,49 @@ export default function LandingPage() {
       {/* Testimonials Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-8">
         <Card>
-          <p>"This platform has changed my life for the better!"</p>
+          <div className="flex items-center gap-4">
+            <img
+              src="/images/avatar1.png"
+              alt="User Avatar"
+              className="w-12 h-12 rounded-full"
+            />
+            <p>"This platform has changed my life for the better!"</p>
+          </div>
         </Card>
         <Card>
-          <p>"The self-check quiz is so helpful and easy to use."</p>
+          <div className="flex items-center gap-4">
+            <img
+              src="/images/avatar1.png"
+              alt="User Avatar"
+              className="w-12 h-12 rounded-full"
+            />
+            <p>"The self-check quiz is so helpful and easy to use."</p>
+          </div>
         </Card>
         <Card>
-          <p>"The self-check quiz is so helpful and easy to use."</p>
+          <div className="flex items-center gap-4">
+            <img
+              src="/images/avatar1.png"
+              alt="User Avatar"
+              className="w-12 h-12 rounded-full"
+            />
+            <p>"The resources provided are incredibly helpful."</p>
+          </div>
         </Card>
         <Card>
-          <p>"The self-check quiz is so helpful and easy to use."</p>
+          <div className="flex items-center gap-4">
+            <img
+              src="/images/avatar1.png"
+              alt="User Avatar"
+              className="w-12 h-12 rounded-full"
+            />
+            <p>"The therapists are very professional and supportive."</p>
+          </div>
         </Card>
       </div>
+
+      {/* FAQ Section */}
+      <FAQSection />
     </div>
   );
 }
