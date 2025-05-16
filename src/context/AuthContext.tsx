@@ -1,7 +1,8 @@
-"use client"
+"use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import api from "../lib/api";
+import { useRouter } from "next/navigation";
 
 interface DecodedToken {
   userId: string;
@@ -13,8 +14,16 @@ interface AuthContextType {
   user: DecodedToken | null;
   token: string | null;
   loading: boolean;
+  otpRequired: boolean;
   login: (email: string, password: string) => Promise<void>;
-  signup: (data: { email: string; password: string }) => Promise<void>;
+  verifyOtp: (email: string, otp: string) => Promise<void>;
+  signup: (data: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    roleIds: number[];
+  }) => Promise<void>;
   logout: () => void;
 }
 
@@ -24,6 +33,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<DecodedToken | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [otpRequired, setOtpRequired] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("jwtToken");
@@ -42,19 +53,50 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await api.post("/auth/login", { email, password });
-      const { token: newToken } = response.data;
-      localStorage.setItem("jwtToken", newToken);
-      const decoded = jwtDecode<DecodedToken>(newToken);
-      setUser(decoded);
-      setToken(newToken);
+      const response = await api.post(`/auth/signin?email=${email}&password=${password}`);
+      const { otpRequired: isOtpRequired } = response.data;
+      setOtpRequired(isOtpRequired);
+      if (!isOtpRequired) {
+        const { token: newToken } = response.data;
+        localStorage.setItem("jwtToken", newToken);
+        const decoded = jwtDecode<DecodedToken>(newToken);
+        setUser(decoded);
+        setToken(newToken);
+      }
     } catch (error) {
       console.error("Login failed:", error);
       throw error;
     }
   };
 
-  const signup = async (data: { email: string; password: string }) => {
+  const verifyOtp = async (email: string, otp: string) => {
+    try {
+      const response = await api.post(`/auth/verify-otp/${email}/${otp}`);
+      const { message, token: newToken } = response.data;
+
+      if (message === "OTP verified successfully") {
+        localStorage.setItem("jwtToken", newToken);
+        const decoded = jwtDecode<DecodedToken>(newToken);
+        setUser(decoded);
+        setToken(newToken);
+        setOtpRequired(false);
+        router.push("/dashboard");
+      } else {
+        throw new Error("OTP verification failed.");
+      }
+    } catch (error) {
+      console.error("OTP verification failed:", error);
+      throw error;
+    }
+  };
+
+  const signup = async (data: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    roleIds: number[];
+  }) => {
     try {
       const response = await api.post("/auth/signup", data);
       const { token: newToken } = response.data;
@@ -72,10 +114,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem("jwtToken");
     setUser(null);
     setToken(null);
+    setOtpRequired(false);
+    router.push("/");
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, signup, logout }}>
+    <AuthContext.Provider
+      value={{ user, token, loading, otpRequired, login, verifyOtp, signup, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

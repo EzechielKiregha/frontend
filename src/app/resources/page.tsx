@@ -28,9 +28,9 @@ export default function ResourcesPage() {
     <><Hero
       title="Mental Health Resources"
       subtitle="Explore a variety of resources to support your mental health journey."
-      imageSrc="/images/MH-resources.png"
-      reverse={false}
-      ctaText="Get Started"
+      imageSrc="/images/resources.jpg"
+      reverse={true}
+      ctaText="Read More"
       ctaLink="/resources/#resources" />
       <div id="resources" className="container mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold text-green-800 mb-4">Resources</h1>

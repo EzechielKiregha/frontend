@@ -1,36 +1,48 @@
 "use client";
-// This code is a custom React hook that fetches resources from an API endpoint.
+
 import { useState, useEffect } from "react";
 import api from "../lib/api";
 
 interface TherapistProfile {
   id: number;
+  userId: number;
   specialty: string;
   bio: string;
   photoUrl: string;
-  availableSlots : string[]
+  availableSlots: string[];
+}
+
+interface Therapist {
+  id: number;
+  name: string;
+  email: string;
 }
 
 export const useTherapistProfiles = () => {
-  const [data, setData] = useState<TherapistProfile[] | null>(null);
+  const [profiles, setProfiles] = useState<TherapistProfile[] | null>(null);
+  const [therapists, setTherapists] = useState<Therapist[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchProfiles = async () => {
+    const fetchTherapists = async () => {
       try {
-        const response = await api.get("/therapists-profiles");
-        console.log({"data" : response.data})
-        setData(response.data);
+        const [profilesResponse, therapistsResponse] = await Promise.all([
+          api.get("/therapists-profiles"), // Fetch therapist profiles
+          api.get("/users?role=THERAPIST"), // Fetch users with the "THERAPIST" role
+        ]);
+
+        setProfiles(profilesResponse.data);
+        setTherapists(therapistsResponse.data);
       } catch (err) {
-        setError("Failed to fetch therapist profiles.");
+        setError("Failed to fetch therapist data.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProfiles();
+    fetchTherapists();
   }, []);
 
-  return { data, loading, error };
+  return { profiles, therapists, loading, error };
 };

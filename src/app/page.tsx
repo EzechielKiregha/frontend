@@ -9,12 +9,12 @@ import FAQSection from "@/components/FAQSection";
 
 export default function LandingPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div>
       {/* Hero Section */}
       <Hero
         title="Empower Your Mind"
         subtitle="Connect with therapists, track your well-being, and join our supportive community."
-        imageSrc="/220520-F-XJ774-1001.jpeg"
+        imageSrc="/mental-health-awareness.jpg"
         ctaText="Get Started"
         ctaLink="/signup"
       />
@@ -48,7 +48,7 @@ export default function LandingPage() {
       <div className="container mx-auto px-4 py-16">
         <Card className="rounded-lg shadow-lg">
           <img
-            src="/Mental-Health-Awareness-Month-FB.png"
+            src="/images/The-Crucial-Years-Supporting-Mental-Health-Care-for-Children.png"
             alt="App Screenshot"
             className="rounded-lg"
           />
