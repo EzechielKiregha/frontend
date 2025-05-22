@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import api from "../lib/api";
 import RecommendedResources from "./RecommendedResources";
+import BasePopover from "./BasePopover";
+import { useAuth } from "@/context/AuthContext";
 
 const questions = [
   "Over the last two weeks, how often have you had little interest or pleasure in doing things?",
@@ -20,6 +22,9 @@ export default function SelfCheckQuiz() {
   const [submitted, setSubmitted] = useState(false);
   const [recommendations, setRecommendations] = useState<number[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isPopoverOpen, setPopoverOpen] = useState(false);
+
+  const { user } = useAuth(); // Assuming you have a user context
 
   const handleAnswer = (value: number) => {
     const updatedAnswers = [...answers];
@@ -34,16 +39,17 @@ export default function SelfCheckQuiz() {
       setLoading(true);
       const score = answers.reduce((sum, value) => sum + value, 0);
       const payload = {
-        userId: 1, // Replace with actual user ID from context or props
+        userId: user?.userId,
         score,
-        answersJson: JSON.stringify(answers),
+        answers,
         takenAt: new Date().toISOString(),
       };
 
       try {
-        const res = await api.post("/api/self-check", payload);
+        const res = await api.post("/self-check", payload);
         setRecommendations(res.data.recommendedResourceIds);
         setSubmitted(true);
+        setPopoverOpen(true);
       } catch (error) {
         console.error("Failed to submit self-check:", error);
       } finally {
@@ -55,8 +61,15 @@ export default function SelfCheckQuiz() {
   if (submitted) {
     return (
       <div className="container mx-auto p-4">
-        <div className="text-green-800 font-bold">Thank you for completing the self-check quiz!</div>
-        {recommendations.length > 0 && <RecommendedResources resourceIds={recommendations} />}
+        {/* your quiz UI here */}
+        <BasePopover
+          title="Your Recommendations"
+          buttonLabel=""           // hide the trigger, we'll open programmatically
+          isOpen={isPopoverOpen}
+          onClose={() => setPopoverOpen(false)}
+        >
+          <RecommendedResources resourceIds={recommendations} />
+        </BasePopover>
       </div>
     );
   }

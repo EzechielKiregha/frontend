@@ -11,6 +11,10 @@ export default function RecommendedResources({ resourceIds }: { resourceIds: num
     }).then(res => setItems(res.data));
   }, [resourceIds]);
 
+  if (resourceIds.length === 0) {
+    return <p className="text-gray-600 italic">No resources to recommend right now. Keep up the good work!</p>;
+  }
+
   return (
     <div className="mt-6">
       <h2 className="text-xl font-semibold text-green-800">Recommended for You</h2>

@@ -40,7 +40,7 @@ export default function ResourcesPage() {
               <h2 className="text-lg font-bold text-green-800">{resource.title}</h2>
               <p className="text-sm text-gray-600">{resource.resourceType}</p>
               <p className="mt-2 text-gray-800">{resource.content.slice(0, 100)}...</p>
-              {user?.role === "PATIENT" && (
+              {user?.role.includes("PATIENT") && (
                 <button
                   onClick={() => handleSave(resource.id)}
                   className="mt-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded"

@@ -1,6 +1,5 @@
 "use client";
-// This code is a custom React hook that fetches resources from an API endpoint.
-// It uses the `useState` and `useEffect` hooks to manage the state of the data, loading status, and error messages.
+
 import { useState, useEffect } from "react";
 import api from "../lib/api";
 import { useAuth } from "@/context/AuthContext";
@@ -13,30 +12,54 @@ interface DashboardStats {
 }
 
 interface Patient {
-  id: number
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
-  roleIds: number[];
+  phoneNumber: string;
+  role: string;
+}
+interface ResourceBreakdownItem {
+  category: string;
+  count: number;
+}
+
+interface AppointmentTrend {
+  month: string;
+  total: number;
+  upcoming: number;
+  completed: number;
 }
 
 export const useDashboardStats = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [chartData, setChartData] = useState<AppointmentTrend[]>([]);
+  const [resourceData, setResourceData] = useState<ResourceBreakdownItem[]>([]);
+  const [tableData, setTableData] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-    const { user } = useAuth()
-    const [patientData, setPatientData] = useState<Patient>()
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        if (user) getPatientData(user.userId)
-        const response = await api.get("/dashboard/stats");
-        setStats(response.data);
-        
+        if (user) {
+          await api.post(`/users/me?id=${user.userId}`);
+        }
+
+        const [statsRes, chartRes, tableRes, resourceRes] = await Promise.all([
+          api.get("/dashboard/stats"),
+          api.get("/dashboard/trends/appointments"),
+          api.get("/dashboard/users-by-role"),
+          api.get("/dashboard/resources-breakdown"),
+        ]);
+
+        setStats(statsRes.data);
+        setChartData(chartRes.data);
+        setTableData(tableRes.data);
+        setResourceData(resourceRes.data);
       } catch (err) {
-        setError("Failed to fetch dashboard stats.");
+        setError("Failed to fetch dashboard data.");
       } finally {
         setLoading(false);
       }
@@ -45,12 +68,6 @@ export const useDashboardStats = () => {
     fetchStats();
   }, [user]);
 
-  const getPatientData = async (id: string) => {
-    const res = await api.post(`/users/me?id=${id}`);
-    if (res.status === 200) {
-      setPatientData(res.data)
-    }
-  }
-
-  return {patientData, stats, loading, error };
+  return { stats, chartData, resourceData, tableData, loading, error };
 };
+

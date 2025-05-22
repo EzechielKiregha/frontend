@@ -3,12 +3,24 @@
 import React, { useState } from "react";
 import api from "../lib/api";
 
+const questions = [
+  "Over the last two weeks, how often have you had little interest or pleasure in doing things?",
+  "Over the last two weeks, how often have you felt down, depressed, or hopeless?",
+  "Over the last two weeks, how often have you had trouble falling or staying asleep, or sleeping too much?",
+  "Over the last two weeks, how often have you felt tired or had little energy?",
+  "Over the last two weeks, how often have you had poor appetite or overeating?",
+  "Over the last two weeks, how often have you had trouble concentrating on things, such as reading or watching TV?",
+  "Over the last two weeks, how often have you been feeling nervous, anxious, or on edge?",
+];
+
 export default function ResourceUploadForm() {
   const [form, setForm] = useState({
     title: "",
     content: "",
-    resourceType: "Article",
+    resourceType: "ARTICLE",
+    questionIndex: 0,
   });
+  const [questionIndex, setQuestionIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -26,7 +38,7 @@ export default function ResourceUploadForm() {
         params: { resourceType: form.resourceType },
       });
       setSuccess(true);
-      setForm({ title: "", content: "", resourceType: "Article" });
+      setForm({ title: "", content: "", resourceType: "Article", questionIndex: 0 });
     } catch (err) {
       setError("Failed to upload resource. Please try again.");
     } finally {
@@ -65,10 +77,20 @@ export default function ResourceUploadForm() {
           onChange={handleChange}
           className="w-full border border-gray-300 rounded px-3 py-2 focus:border-green-600 focus:ring-1 focus:ring-green-600"
         >
-          <option value="Article">Article</option>
-          <option value="Video">Video</option>
-          <option value="Guide">Guide</option>
+          <option value="ARTICLE">Article</option>
+          <option value="EXERCISE">Exercise</option>
+          <option value="GUIDE">Guide</option>
         </select>
+        <label>
+          Question #
+          <select
+            value={questionIndex}
+            onChange={e => setQuestionIndex(Number(e.target.value))}
+            className="border p-2 rounded ml-2"
+          >
+            {questions.map((_, i) => <option key={i} value={i}>{i + 1}</option>)}
+          </select>
+        </label>
         <button
           type="submit"
           disabled={loading}
