@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import api from "../lib/api";
+import Loader from "./Loader";
+import { useAuth } from "@/context/AuthContext";
 
 const questions = [
   "Over the last two weeks, how often have you had little interest or pleasure in doing things?",
@@ -14,11 +16,14 @@ const questions = [
 ];
 
 export default function ResourceUploadForm() {
+
+  const { user } = useAuth();
   const [form, setForm] = useState({
     title: "",
     content: "",
-    resourceType: "ARTICLE",
+    resourceType: "",
     questionIndex: 0,
+    therapistId: user?.userId,
   });
   const [questionIndex, setQuestionIndex] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -34,11 +39,20 @@ export default function ResourceUploadForm() {
     setLoading(true);
     setError(null);
     try {
-      await api.post("/resources/upload", form, {
-        params: { resourceType: form.resourceType },
-      });
-      setSuccess(true);
-      setForm({ title: "", content: "", resourceType: "Article", questionIndex: 0 });
+
+      if (!user?.userId) {
+        setError("User not authenticated");
+        return;
+      } else {
+        const res = await api.post("/resources/upload", form);
+        if (res.status === 200) {
+          setSuccess(true);
+          setForm({ title: "", content: "", resourceType: "ARTICLE", questionIndex: 0, therapistId: user?.userId });
+          setQuestionIndex(0);
+        } else {
+          setError("Failed to upload resource. Please try again.");
+        }
+      }
     } catch (err) {
       setError("Failed to upload resource. Please try again.");
     } finally {
@@ -94,11 +108,34 @@ export default function ResourceUploadForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded disabled:opacity-50"
+          className={`w-full px-4 py-2 ${loading ? "bg-green-200 hover:bg-green-300 text-green-900" : "bg-green-600 hover:bg-green-700 text-white"} rounded disabled:opacity-50`}
         >
-          {loading ? "Uploading..." : "Upload"}
+          {loading ? <Loader message="Uploading..." /> : "Upload"}
         </button>
       </form>
     </div>
   );
 }
+
+/**
+ * 
+ * Finding Joy in Everyday Activities [Exercise]
+ * 
+ * 
+ * Managing Low Mood [Guide] 
+ * 
+ * 
+ * Improving Sleep Hygiene [Article]
+ * 
+ * 
+ * Boost Your Energy Levels [Guide]
+ * 
+ * 
+ * Healthy Eating Habits [Article]
+ * 
+ * 
+ * Focus & Concentration Exercises [Exercise]
+ * 
+ * 
+ * Anxiety Management Techniques [Guide]
+ */

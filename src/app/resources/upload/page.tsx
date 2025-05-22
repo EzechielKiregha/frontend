@@ -9,7 +9,7 @@ export default function UploadPage() {
       <Hero
         title="Upload Resources"
         subtitle="Share valuable resources to support mental health."
-        imageSrc="/MH-resources.png"
+        imageSrc="/images/resources.jpg"
         reverse={false}
         ctaText="Get Started"
         ctaLink="/resources/upload/#upload"

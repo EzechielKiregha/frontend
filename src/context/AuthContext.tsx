@@ -167,6 +167,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setToken(null);
     setOtpRequired(false);
     router.push('/login');
+    router.refresh();
   };
 
   return (

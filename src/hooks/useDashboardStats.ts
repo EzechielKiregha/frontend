@@ -4,14 +4,14 @@ import { useState, useEffect } from "react";
 import api from "../lib/api";
 import { useAuth } from "@/context/AuthContext";
 
-interface DashboardStats {
+export interface DashboardStats {
   totalAppointments: number;
   completedAppointments: number;
   upcomingAppointments: number;
   messages: number;
 }
 
-interface Patient {
+export interface Patient {
   id: number;
   firstName: string;
   lastName: string;
@@ -19,12 +19,12 @@ interface Patient {
   phoneNumber: string;
   role: string;
 }
-interface ResourceBreakdownItem {
+export interface ResourceBreakdownItem {
   category: string;
   count: number;
 }
 
-interface AppointmentTrend {
+export interface AppointmentTrend {
   month: string;
   total: number;
   upcoming: number;
@@ -37,36 +37,51 @@ export const useDashboardStats = () => {
   const [resourceData, setResourceData] = useState<ResourceBreakdownItem[]>([]);
   const [tableData, setTableData] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string| null>(null);
+  const [patientData, setPatientData] = useState<Patient | null>(null);
   const { user } = useAuth();
 
   useEffect(() => {
-    const fetchStats = async () => {
+    const fetchAll = async () => {
       try {
         if (user) {
-          await api.post(`/users/me?id=${user.userId}`);
+          await getPatientData(user.userId);
         }
-
-        const [statsRes, chartRes, tableRes, resourceRes] = await Promise.all([
-          api.get("/dashboard/stats"),
-          api.get("/dashboard/trends/appointments"),
-          api.get("/dashboard/users-by-role"),
-          api.get("/dashboard/resources-breakdown"),
+        const [ statsRes, trendsRes, patientsRes ] = await Promise.all([
+          api.get<DashboardStats>('/dashboard/stats'),
+          api.get<AppointmentTrend[]>('/dashboard/trends/appointments'),
+          api.get<Patient[]>('/dashboard/patients')
         ]);
 
+        const resourcesRes = await api.get<Record<string, number>>(
+          '/dashboard/resources-breakdown'
+        );
+
+        // Convert { articles: 5, guides: 4, exercises: 2 } →
+        // [ { category: 'articles', count: 5 }, … ]
+        const resourceArray = Object.entries(resourcesRes.data).map(
+          ([category, count]) => ({ category, count })
+        );
+        setResourceData(resourceArray);
+
         setStats(statsRes.data);
-        setChartData(chartRes.data);
-        setTableData(tableRes.data);
-        setResourceData(resourceRes.data);
-      } catch (err) {
-        setError("Failed to fetch dashboard data.");
+        setChartData(trendsRes.data);
+        setTableData(patientsRes.data);
+      } catch {
+        setError('Failed to fetch dashboard data.');
       } finally {
         setLoading(false);
       }
     };
-
-    fetchStats();
+    fetchAll();
   }, [user]);
+
+  const getPatientData = async (id: string) => {
+    const res = await api.post(`/users/me?id=${id}`);
+    if (res.status === 200) {
+      setPatientData(res.data)
+    }
+  }
 
   return { stats, chartData, resourceData, tableData, loading, error };
 };
