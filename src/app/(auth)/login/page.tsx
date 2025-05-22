@@ -35,8 +35,8 @@ export default function LoginPage() {
     setError(null);
     try {
       // Trigger login and send OTP
-      await login(form.email, form.password);
-      if (user) setPhone(user?.phoneNumber)
+      await login(form.email.trim(), form.password.trim());
+      if (user) setPhone(user.phoneNumber)
       setOtpPopoverOpen(true);
     } catch (err) {
       setError("Login failed. Please check your credentials.");
@@ -49,10 +49,15 @@ export default function LoginPage() {
     e.preventDefault();
     setError(null);
     try {
-      await verifyOtp(phone, otp);
-      // Close OTP popover on success
-      setOtpPopoverOpen(false)
-      router.push("/dashboard")
+      if (phone === "") {
+        setError("Phone number is not available. Please try login again.");
+      }
+      else {
+        await verifyOtp(phone, otp);
+        // Close OTP popover on success
+        setOtpPopoverOpen(false)
+        router.push("/dashboard")
+      }
     } catch (err) {
       setError("Invalid OTP. Please try again.");
     }

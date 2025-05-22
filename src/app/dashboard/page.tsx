@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import PatientDashboard from "../../components/dashboards/PatientDashboard";
 import TherapistDashboard from "../../components/dashboards/TherapistDashboard";
 import AdminDashboard from "../../components/dashboards/AdminDashboard";
@@ -13,13 +13,13 @@ export default function DashboardPage() {
 
   if (!user) return <Loader message="User data is loading..." />;
 
-  if (user.roles.includes("THERAPIST")) {
+  if (user.role.includes("THERAPIST")) {
     return <TherapistDashboard />;
-  } else if (user.roles.includes("MANAGER")) {
+  } else if (user.role.includes("MANAGER")) {
     return <ManagerDashboard />;
-  } else if (user.roles.includes("ADMIN")) {
+  } else if (user.role.includes("ADMIN")) {
     return <AdminDashboard />;
-  } else if (user.roles.includes("PATIENT")) {
+  } else if (user.role.includes("PATIENT")) {
     return <PatientDashboard />;
   } else {
     return <div>Unauthorized</div>;

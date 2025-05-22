@@ -9,7 +9,7 @@ import { send } from 'process';
 interface DecodedToken {
   userId: string;
   email: string;
-  roles: string[];
+  role: string[];
   phoneNumber: string;
 }
 
@@ -44,21 +44,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     code: string;
   }>();
 
-  const [phone, setPhone] = useState<string>("");
-
   useEffect(() => {
     const stored = localStorage.getItem('jwtToken');
     if (stored) {
       const decoded = jwtDecode<DecodedToken>(stored);
-      if (
-        typeof decoded === "object" &&
-        decoded !== null &&
-        Array.isArray((decoded as any).roles)
-      ) {
-        setUser(decoded as DecodedToken);
-        setToken(stored);
-        setUser(decoded);
-      }
+      setUser(decoded as DecodedToken);
+      setToken(stored);
+      setUser(decoded);
     }
     setLoading(false);
   }, []);
@@ -74,22 +66,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const newToken = res.data.token;
         localStorage.setItem('jwtToken', newToken);
         const decoded = jwtDecode<DecodedToken>(newToken);
-        if (
-          typeof decoded === "object" &&
-          decoded !== null &&
-          Array.isArray((decoded as any).roles)
-        ) {
-          setUser(decoded as DecodedToken);
-          setToken(newToken);
-          setUser(decoded);
-          if (!decoded.phoneNumber.startsWith("+")) {
-            setPhone("+250" + decoded.phoneNumber.substring(1));  // For Rwandan numbers
-          }
+        setUser(decoded);
+        setToken(newToken);
+        setUser(decoded);
+        if (decoded !== null && decoded.phoneNumber) {
           const response = await sendOtp("+250" + decoded.phoneNumber.substring(1))
           setOtpReceiver(response); // Send OTP to the user's phone number
           console.log('OTP sent to:', response.sendTo);
           console.log('OTP code:', response.code);
           setOtpRequired(true);
+          console.log('Login successful:', user);
         }
         // console.log('Decoded token:', decoded);
         // OTP required, show OTP input
@@ -138,10 +124,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       console.log("Verify otp : number :" + phone + "code :" + otp)
       const res = await api.post('/auth/verify-otp', null, {
-        params: { phoneNumber: phone, code: otp },
+        params: { phoneNumber: phone, inputedOTP: otp },
       });
       if (res.status === 200) {
-        console.log("message", res.data.message);
+        console.log("message: ", res.data.message);
         setOtpRequired(false); // OTP verified, proceed
       } else {
         throw new Error('OTP verification failed');

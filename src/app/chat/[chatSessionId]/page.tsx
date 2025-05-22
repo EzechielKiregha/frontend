@@ -54,9 +54,9 @@ export default function ChatSessionPage() {
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (user && user.roles.includes("PATIENT") && !user.roles.includes("THERAPIST")) {
+    if (user && user.role.includes("PATIENT") && !user.role.includes("THERAPIST")) {
       setSentFrom(sender.PATIENT)
-    } else if (user && user.roles.includes("THERAPIST")) { setSentFrom(sender.THERAPIST) }
+    } else if (user && user.role.includes("THERAPIST")) { setSentFrom(sender.THERAPIST) }
     else {
       setError("Sorry You Can't Send Message")
     }
