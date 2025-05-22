@@ -182,7 +182,10 @@ export default function DynamicTable({ columns, data, title, onDelete }: Dynamic
               </TableRow>
             </TableHead>
             <TableBody>
-              {visibleRows.map((row) => {
+              {visibleRows.map((row, rowIndex) => {
+                if (!row.id) {
+                  console.warn("Row with missing id:", row); // Log rows with missing id
+                }
                 const isItemSelected = isSelected(row.id);
                 return (
                   <TableRow
@@ -191,7 +194,7 @@ export default function DynamicTable({ columns, data, title, onDelete }: Dynamic
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.id}
+                    key={row.id || `fallback-${rowIndex}`} // Use fallback key if id is missing
                     selected={isItemSelected}
                   >
                     <TableCell padding="checkbox">

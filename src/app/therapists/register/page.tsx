@@ -6,6 +6,7 @@ import Loader from "../../../components/Loader";
 import ErrorMessage from "../../../components/ErrorMessage";
 import Button from "../../../components/Button";
 import { useRoles } from "@/hooks/useRoles";
+import { ArrowLeft } from "lucide-react";
 
 export default function RegisterPatient() {
   const { data: roles, loading: rolesLoading, error: rolesError } = useRoles();
@@ -57,6 +58,12 @@ export default function RegisterPatient() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <span className="text-gray-600 mb-4">
+        <ArrowLeft className="inline mr-2" />
+        <a href="/dashboard" className="text-green-600 hover:underline">
+          Back to dashboard
+        </a>
+      </span>
       <h1 className="text-green-800 text-2xl font-bold mb-4">Register Patient</h1>
       {loading && <Loader message="Registering patient..." />}
       {error && <ErrorMessage message={error} />}

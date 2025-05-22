@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import api from "../lib/api";
 import Loader from "./Loader";
 import { useAuth } from "@/context/AuthContext";
+import { ArrowLeft } from "lucide-react";
 
 const questions = [
   "Over the last two weeks, how often have you had little interest or pleasure in doing things?",
@@ -22,10 +23,8 @@ export default function ResourceUploadForm() {
     title: "",
     content: "",
     resourceType: "",
-    questionIndex: 0,
-    therapistId: user?.userId,
   });
-  const [questionIndex, setQuestionIndex] = useState(0);
+  const [questionIndex, setQuestionIndex] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -44,10 +43,14 @@ export default function ResourceUploadForm() {
         setError("User not authenticated");
         return;
       } else {
-        const res = await api.post("/resources/upload", form);
+        console.log("User ID:", user.userId);
+        console.log("Form data:", form);
+        const res = await api.post("/resources/upload", form, {
+          params: { userId: user.userId, questionIndex },
+        });
         if (res.status === 200) {
           setSuccess(true);
-          setForm({ title: "", content: "", resourceType: "ARTICLE", questionIndex: 0, therapistId: user?.userId });
+          setForm({ title: "", content: "", resourceType: "ARTICLE" });
           setQuestionIndex(0);
         } else {
           setError("Failed to upload resource. Please try again.");
@@ -62,7 +65,14 @@ export default function ResourceUploadForm() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <span className="text-gray-600 mb-4">
+        <ArrowLeft className="inline mr-2" />
+        <a href="/dashboard" className="text-green-600 hover:underline">
+          Back to dashboard
+        </a>
+      </span>
       <h1 className="text-2xl font-bold text-green-800 mb-4">Upload Resource</h1>
+
       {error && <p className="text-red-600 mb-4">{error}</p>}
       {success && <p className="text-green-600 mb-4">Resource uploaded successfully!</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -116,26 +126,3 @@ export default function ResourceUploadForm() {
     </div>
   );
 }
-
-/**
- * 
- * Finding Joy in Everyday Activities [Exercise]
- * 
- * 
- * Managing Low Mood [Guide] 
- * 
- * 
- * Improving Sleep Hygiene [Article]
- * 
- * 
- * Boost Your Energy Levels [Guide]
- * 
- * 
- * Healthy Eating Habits [Article]
- * 
- * 
- * Focus & Concentration Exercises [Exercise]
- * 
- * 
- * Anxiety Management Techniques [Guide]
- */

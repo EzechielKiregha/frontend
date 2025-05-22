@@ -17,7 +17,7 @@ export interface Patient {
   lastName: string;
   email: string;
   phoneNumber: string;
-  role: string;
+  roles: string[];
 }
 export interface ResourceBreakdownItem {
   category: string;
@@ -67,6 +67,7 @@ export const useDashboardStats = () => {
         setStats(statsRes.data);
         setChartData(trendsRes.data);
         setTableData(patientsRes.data);
+        console.log("Patient data:", patientsRes.data);
       } catch {
         setError('Failed to fetch dashboard data.');
       } finally {

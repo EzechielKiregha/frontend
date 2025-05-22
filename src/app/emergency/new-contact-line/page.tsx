@@ -4,6 +4,7 @@ import ErrorMessage from "@/components/ErrorMessage";
 import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import api from "@/lib/api";
+import { ArrowLeft } from "lucide-react";
 import React, { useState } from "react";
 
 
@@ -38,9 +39,15 @@ export default function NewContactLine() {
   return (
     <div className="container mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 gap-8">
       <div>
-        <img src="/emergency-contact.jpg" alt="Emergency Contact" className="rounded-lg" />
+        <img src="/images/ba-crisis-assistance.png" alt="Emergency Contact" className="rounded-lg" />
       </div>
       <div className="bg-white border border-green-600 rounded-lg p-8 shadow-lg">
+        <span className="text-gray-600 mb-4">
+          <ArrowLeft className="inline mr-2" />
+          <a href="/dashboard" className="text-green-600 hover:underline">
+            Back to dashboard
+          </a>
+        </span>
         <h1 className="text-green-800 text-2xl font-bold mb-4">Add Emergency Contact Line</h1>
         {loading && <Loader />}
         {error && <ErrorMessage message={error} />}
