@@ -13,16 +13,15 @@ export default function DashboardPage() {
 
   if (!user) return <Loader message="User data is loading..." />;
 
-  switch (user.role) {
-    case "PATIENT":
-      return <PatientDashboard />;
-    case "THERAPIST":
-      return <TherapistDashboard />;
-    case "ADMIN":
-      return <AdminDashboard />;
-    case "MANAGER":
-      return <ManagerDashboard />;
-    default:
-      return <p>Unauthorized</p>;
+  if (user.roles.includes("THERAPIST")) {
+    return <TherapistDashboard />;
+  } else if (user.roles.includes("MANAGER")) {
+    return <ManagerDashboard />;
+  } else if (user.roles.includes("ADMIN")) {
+    return <AdminDashboard />;
+  } else if (user.roles.includes("PATIENT")) {
+    return <PatientDashboard />;
+  } else {
+    return <div>Unauthorized</div>;
   }
 }

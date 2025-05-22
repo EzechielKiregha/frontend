@@ -20,17 +20,17 @@ api.interceptors.request.use(
 );
 
 // Response interceptor to handle 401 errors
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      console.error("Unauthorized. Logging out...");
-      // Add logout logic here, e.g., clearing localStorage or redirecting
-      localStorage.removeItem("jwtToken");
-      window.location.href = "/login"; // Redirect to login page
-    }
-    return Promise.reject(error);
-  }
-);
+// api.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     if (error.response?.status === 401) {
+//       console.error("Unauthorized. Logging out...");
+//       // Add logout logic here, e.g., clearing localStorage or redirecting
+//       localStorage.removeItem("jwtToken");
+//       window.location.href = "/login"; // Redirect to login page
+//     }
+//     return Promise.reject(error);
+//   }
+// );
 
 export default api;

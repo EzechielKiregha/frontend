@@ -16,13 +16,14 @@ import {
 import api from "@/lib/api";
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { user, login, verifyOtp } = useAuth();
   const router = useRouter();
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [otpPopoverOpen, setOtpPopoverOpen] = useState(false);
   const [otp, setOtp] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -35,7 +36,8 @@ export default function LoginPage() {
     try {
       // Trigger login and send OTP
       await login(form.email, form.password);
-      setOtpPopoverOpen(true); // Open the OTP popover
+      if (user) setPhone(user?.phoneNumber)
+      setOtpPopoverOpen(true);
     } catch (err) {
       setError("Login failed. Please check your credentials.");
     } finally {
@@ -43,19 +45,16 @@ export default function LoginPage() {
     }
   };
 
-  const handleVerifyOtp = async () => {
-    setLoading(true);
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
     setError(null);
     try {
-      // Verify OTP logic
-      const otpData = { email: form.email, otp };
-      const res = await api.post(`/auth/verify-otp/${otpData.email}/${otpData.otp}`);
-      console.log("OTP verification response:", res.data);
-      router.push("/dashboard");
+      await verifyOtp(phone, otp);
+      // Close OTP popover on success
+      setOtpPopoverOpen(false)
+      router.push("/dashboard")
     } catch (err) {
       setError("Invalid OTP. Please try again.");
-    } finally {
-      setLoading(false);
     }
   };
 

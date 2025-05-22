@@ -13,9 +13,12 @@ interface TherapistProfile {
 }
 
 interface Therapist {
-  id: number;
-  name: string;
+  id:number
+  firstName: string;
+  lastName: string;
   email: string;
+  password: string;
+  roleIds: number[];
 }
 
 export const useTherapistProfiles = () => {

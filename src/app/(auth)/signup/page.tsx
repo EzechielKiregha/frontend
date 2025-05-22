@@ -16,6 +16,7 @@ export default function SignupPage() {
     firstName: "",
     lastName: "",
     email: "",
+    phoneNumber: "",
     password: "",
     roleIds: [] as number[],
   });
@@ -42,7 +43,7 @@ export default function SignupPage() {
     try {
       console.log("Form data before signup:", form.roleIds);
       await signup(form);
-      router.push("/dashboard");
+      router.push("/login");
     } catch (err) {
       setError("Signup failed. Please try again.");
     } finally {
@@ -81,15 +82,26 @@ export default function SignupPage() {
               className="w-full border border-gray-300 rounded px-3 py-2 focus:border-green-600 focus:ring-1 focus:ring-green-600"
             />
           </div>
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={form.email}
-            required
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:border-green-600 focus:ring-1 focus:ring-green-600"
-          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={form.email}
+              required
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:border-green-600 focus:ring-1 focus:ring-green-600"
+            />
+            <input
+              type="phone"
+              name="phoneNumber"
+              placeholder="phone number"
+              value={form.phoneNumber}
+              required
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:border-green-600 focus:ring-1 focus:ring-green-600"
+            />
+          </div>
           <input
             type="password"
             name="password"

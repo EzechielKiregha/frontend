@@ -16,7 +16,7 @@ export default function TherapistsPage() {
 
   const handleStartChat = async (therapistId: number) => {
     try {
-      const response = await api.post(`/api/chat/start?userId=${user?.userId}&therapistId=${therapistId}`);
+      const response = await api.post(`/chat/start?userId=${user?.userId}&therapistId=${therapistId}`);
       const chatSession = response.data;
       router.push(`/chat/${chatSession.id}`);
     } catch (err) {
@@ -45,16 +45,16 @@ export default function TherapistsPage() {
             return (
               <div key={therapist.id} className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm">
                 <img
-                  src={profile?.photoUrl || "/default-avatar.png"}
-                  alt={therapist.name}
+                  src={"/images/eze.jpg"} //profile?.photoUrl ||
+                  alt={therapist.firstName}
                   className="w-full h-48 object-cover rounded-md mb-4"
                 />
-                <h2 className="text-lg font-bold text-green-800">{therapist.name}</h2>
+                <h2 className="text-lg font-bold text-green-800">{therapist.firstName} {therapist.lastName}</h2>
                 <p className="text-sm text-gray-600">{profile?.specialty || "Specialty not available"}</p>
                 <p className="mt-2 text-gray-800">{profile?.bio || "No bio available"}</p>
                 <AlertDialog
                   title="Start Chat"
-                  description={`Are you sure you want to start a chat session with ${therapist.name}?`}
+                  description={`Are you sure you want to start a chat session with ${therapist.firstName} ${therapist.lastName}?`}
                   onConfirm={() => handleStartChat(therapist.id)}
                 >
                   <button className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white rounded py-2">

@@ -1,17 +1,22 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDashboardStats } from "../../hooks/useDashboardStats";
 import Loader from "../Loader";
 import ErrorMessage from "../ErrorMessage";
 import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
 
+
+
 export default function PatientDashboard() {
-  const { stats, loading, error } = useDashboardStats();
+  const { patientData, stats, loading, error } = useDashboardStats();
+
 
   if (loading) return <Loader />;
   if (error) return <ErrorMessage message={error} />;
+
+
 
   const handleConfirmAppointment = () => {
     console.log("Appointment confirmed!");
@@ -28,8 +33,13 @@ export default function PatientDashboard() {
       {/* Profile Section */}
       <div className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm mb-8">
         <h2 className="text-lg font-bold text-green-800">Your Profile</h2>
-        <p className="text-gray-800">Name: John Doe</p>
-        <p className="text-gray-800">Email: john.doe@example.com</p>
+        <img
+          src="/images/eze.jpg"
+          alt="User Avatar"
+          className="w-12 h-12 rounded-full"
+        />
+        <p className="text-gray-800">Name: {patientData?.firstName} {patientData?.lastName}</p>
+        <p className="text-gray-800">Email:  {patientData?.email}</p>
         <Button className="mt-4 bg-green-600 hover:bg-green-700 text-white">
           Update Profile
         </Button>
