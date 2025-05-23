@@ -84,6 +84,6 @@ export const useDashboardStats = () => {
     }
   }
 
-  return { stats, chartData, resourceData, tableData, loading, error };
+  return { patientData, stats, chartData, resourceData, tableData, loading, error };
 };
 

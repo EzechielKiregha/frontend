@@ -3,12 +3,14 @@
 import ErrorMessage from "@/components/ErrorMessage";
 import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/api";
 import { ArrowLeft } from "lucide-react";
 import React, { useState } from "react";
 
 
 export default function NewContactLine() {
+  const { user } = useAuth()
   const [form, setForm] = useState({
     name: "",
     phoneNumber: "",
@@ -26,7 +28,11 @@ export default function NewContactLine() {
     setLoading(true);
     setError(null);
     try {
-      await api.post("/emergency/new-contact-line", form);
+      await api.post("/emergency/new-contact-line", form, {
+        params: {
+          userId: user?.userId
+        }
+      });
       alert("Emergency contact line added successfully!");
       setForm({ name: "", phoneNumber: "", description: "" });
     } catch (err) {

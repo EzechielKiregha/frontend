@@ -5,6 +5,7 @@ import { BarChart, CartesianGrid, XAxis, Bar, Tooltip } from 'recharts';
 import { PieChart, Pie, Cell } from 'recharts';
 import DynamicTable from '@/components/tables/DynamicTable';
 import { useDashboardStats } from '@/hooks/useDashboardStats';
+import { Button } from "../ui/button";
 
 const COLORS = ['#4CAF50', '#81C784', '#C8E6C9', '#2E7D32', '#A5D6A7'];
 
@@ -18,7 +19,7 @@ const columns = [
 ];
 
 export default function TherapistDashboard() {
-  const { stats, chartData, resourceData, tableData, loading, error } = useDashboardStats();
+  const { stats, chartData, patientData, resourceData, tableData, loading, error } = useDashboardStats();
 
   const handleDelete = (selected: string[]) => {
     console.log("Deleted rows:", selected);
@@ -27,6 +28,20 @@ export default function TherapistDashboard() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-green-800 mb-4">Therapist Dashboard</h1>
+      {/* Profile Section */}
+      <div className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm mb-8">
+        <h2 className="text-lg font-bold text-green-800">Your Profile</h2>
+        <img
+          src="/images/eze.jpg"
+          alt="User Avatar"
+          className="w-12 h-12 rounded-full"
+        />
+        <p className="text-gray-800">Name: {patientData?.firstName} {patientData?.lastName}</p>
+        <p className="text-gray-800">Email:  {patientData?.email}</p>
+        <Button className="mt-4 bg-green-600 hover:bg-green-700 text-white">
+          Update Profile
+        </Button>
+      </div>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-8">
         <a href="/self-check/results" className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm text-center hover:bg-green-100">
           <h2 className="text-lg font-bold text-green-800">Self-Check Results</h2>
