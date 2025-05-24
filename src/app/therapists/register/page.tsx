@@ -2,11 +2,11 @@
 
 import React, { useState } from "react";
 import api from "../../../lib/api";
-import Loader from "../../../components/Loader";
 import ErrorMessage from "../../../components/ErrorMessage";
 import Button from "../../../components/Button";
 import { useRoles } from "@/hooks/useRoles";
 import { ArrowLeft } from "lucide-react";
+import DLoader from "@/components/DataLoader";
 
 export default function RegisterPatient() {
   const { data: roles, loading: rolesLoading, error: rolesError } = useRoles();
@@ -65,7 +65,7 @@ export default function RegisterPatient() {
         </a>
       </span>
       <h1 className="text-green-800 text-2xl font-bold mb-4">Register Patient</h1>
-      {loading && <Loader message="Registering patient..." />}
+      {loading && <DLoader message="Registering patient..." />}
       {error && <ErrorMessage message={error} />}
       {rolesError && <ErrorMessage message={rolesError} />}
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -121,7 +121,7 @@ export default function RegisterPatient() {
         <div>
           <h3 className="text-green-800 font-semibold mb-2">Select Roles:</h3>
           {rolesLoading ? (
-            <Loader message="Loading roles..." />
+            <DLoader message="Loading roles..." />
           ) : (
             <div className="grid grid-cols-2 gap-2">
               {roles?.map((role) => (

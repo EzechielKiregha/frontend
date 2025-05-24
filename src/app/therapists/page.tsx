@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { useTherapistProfiles } from "../../hooks/useTherapistProfiles";
 import { useAuth } from "../../context/AuthContext";
-import Loader from "../../components/Loader";
 import ErrorMessage from "../../components/ErrorMessage";
 import { Card, CardHeader, CardBody, CardFooter } from "@/components/ui/ReusableCard";
 import { Button } from "@/components/ui/button";
@@ -13,6 +12,7 @@ import api from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useDashboardStats } from "@/hooks/useDashboardStats";
 import Hero from "@/components/Hero";
+import DLoader from "@/components/DataLoader";
 
 export default function TherapistsPage() {
   const { therapistsData, loading, error } = useDashboardStats();
@@ -42,9 +42,13 @@ export default function TherapistsPage() {
     setLoadingBooking(true);
     setErrorBooking(null);
     try {
-      await api.post(`/appointments/book`, {
-        therapistId: selectedTherapist,
-        appointmentTime: appointmentDate.toISOString(),
+      await api.post(`/appointments/book`, null, {
+        params: {
+          userId: user?.userId,
+          therapistId: selectedTherapist,
+          appointmentTime: appointmentDate.toISOString(),
+        }
+
       });
       alert("Appointment booked successfully!");
       setSelectedTherapist(null);
@@ -56,7 +60,7 @@ export default function TherapistsPage() {
     }
   };
 
-  if (loading) return <Loader />;
+  if (loading) return <DLoader />;
   if (error) return <ErrorMessage message={error} />;
 
   return (
@@ -92,7 +96,10 @@ export default function TherapistsPage() {
                 <CardFooter className="flex flex-col gap-2">
                   <Button
                     className="bg-green-600 hover:bg-green-700 text-white"
-                    onClick={() => handleStartChat(therapist.id)}
+                    onClick={() => {
+                      handleStartChat(therapist.id)
+                      console.log("Therapist ID: " + therapist.id)
+                    }}
                   >
                     Chat
                   </Button>
@@ -103,11 +110,23 @@ export default function TherapistsPage() {
                     <form className="space-y-4">
                       {errorBooking && <p className="text-red-600">{errorBooking}</p>}
                       <DatePickerWithPresets
-                        onDateChange={(date) => setAppointmentDate(date)} />
+                        onDateChange={(date) => {
+                          setSelectedTherapist(therapist.id)
+                          setAppointmentDate(date)
+                        }} />
+                      <div className="flex items-center space-x-4">
+                        <img
+                          src={therapist?.therapistProfile.photoUrl || "/images/eze.jpg"}
+                          alt={`${therapist.firstName} ${therapist.lastName}`}
+                          className="w-16 h-16 rounded-full border border-green-600" />
+                        <div>
+                          <h2 className="text-lg font-bold text-green-800">{therapist.firstName} {therapist.lastName}</h2>
+                          <p className="text-sm text-gray-600">Select a date and book now ...</p>
+                        </div>
+                      </div>
                       <Button
                         className="w-full bg-green-600 hover:bg-green-700 text-white"
                         onClick={() => {
-                          setSelectedTherapist(therapist.id);
                           handleBookAppointment();
                         }}
                         disabled={loadingBooking}

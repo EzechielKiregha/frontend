@@ -3,9 +3,9 @@
 import React, { useState, useEffect, use } from "react";
 import { useParams } from "next/navigation";
 import api from "@/lib/api";
-import Loader from "@/components/Loader";
 import ErrorMessage from "@/components/ErrorMessage";
 import { useAuth } from "@/context/AuthContext";
+import DLoader from "@/components/DataLoader";
 
 
 interface Message {
@@ -77,7 +77,7 @@ export default function ChatSessionPage() {
     }
   };
 
-  if (loading) return <Loader />;
+  if (loading) return <DLoader />;
   if (error) return <ErrorMessage message={error} />;
 
   return (

@@ -3,9 +3,9 @@
 import React, { useState } from "react";
 import api from "../../../lib/api";
 import { useRouter } from "next/navigation";
-import Loader from "../../../components/Loader";
 import ErrorMessage from "../../../components/ErrorMessage";
 import Button from "../../../components/Button";
+import DLoader from "@/components/DataLoader";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -23,7 +23,12 @@ export default function ResetPasswordPage() {
     setLoading(true);
     setError(null);
     try {
-      await api.post("/auth/reset-password", form);
+      await api.post("/auth/reset-password", null, {
+        params: {
+          email: form.email,
+          newPassword: form.newPassword
+        }
+      });
       setSuccess(true);
       setTimeout(() => router.push("/login"), 2000);
     } catch (err) {
@@ -40,7 +45,7 @@ export default function ResetPasswordPage() {
       </div>
       <div className="bg-white border border-green-600 rounded-lg p-8 shadow-lg">
         <h1 className="text-green-800 text-2xl font-bold mb-4">Reset Password</h1>
-        {loading && <Loader />}
+        {loading && <DLoader />}
         {error && <ErrorMessage message={error} />}
         {success && (
           <p className="text-green-600 mb-4">

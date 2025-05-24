@@ -8,10 +8,9 @@ import { Patient } from "./useDashboardStats";
 
 interface Appointment {
   id: number;
-  date: string;
-  time: string;
   user: Patient;
   therapist: Patient;
+  appointmentTime: string;
   status: string;
 }
 
@@ -29,12 +28,18 @@ export const useAppointments = () => {
   });
 
   const bookAppointment = async (details: object) => {
-    await api.post("/appointments/book", details,);
+    await api.post("/appointments/book", details, {
+      params:{
+        userId: user?.userId
+      }
+    });
     mutate();
   };
 
-  const updateAppointmentStatus = async (id: string, status: string) => {
-    await api.post(`/appointments/update-status`, { id, status });
+  const updateAppointmentStatus = async (id: number, status: string) => {
+    await api.post(`/appointments/update-status`, null, {
+      params:{ appointmentId : id, status, userId: user?.userId }
+    });
     mutate();
   };
 

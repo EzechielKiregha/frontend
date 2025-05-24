@@ -11,7 +11,6 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar />
       <main className="container mx-auto pb-8">{children}</main>
       <Footer />
     </div>

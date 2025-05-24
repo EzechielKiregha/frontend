@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import DynamicTable from "../../../components/tables/DynamicTable";
-import Loader from "../../../components/Loader";
 import api from "../../../lib/api";
 import { ArrowLeft } from "lucide-react";
+import DLoader from "@/components/DataLoader";
 
 const columns = [
   { id: "id", label: "ID" },
@@ -35,7 +35,7 @@ export default function SelfCheckResults() {
       </span>
       <h1 className="text-2xl font-bold text-green-800 mb-4">Self-Check Results</h1>
       {loading ? (
-        <Loader message="Loading results..." />
+        <DLoader message="Loading results..." />
       ) : (
         <DynamicTable columns={columns} data={data} title="Results" />
       )}

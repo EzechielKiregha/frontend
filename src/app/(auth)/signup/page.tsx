@@ -3,10 +3,10 @@
 import React, { useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { useRouter } from "next/navigation";
-import Loader from "../../../components/Loader";
 import ErrorMessage from "../../../components/ErrorMessage";
 import Button from "../../../components/Button";
 import { useRoles } from "@/hooks/useRoles";
+import DLoader from "@/components/DataLoader";
 
 export default function SignupPage() {
   const { signup } = useAuth();
@@ -58,7 +58,7 @@ export default function SignupPage() {
       </div>
       <div className="bg-white border border-green-600 rounded-lg p-8 shadow-lg">
         <h1 className="text-green-800 text-2xl font-bold mb-4">Sign Up</h1>
-        {loading && <Loader />}
+        {loading && <DLoader />}
         {error && <ErrorMessage message={error} />}
         {rolesError && <ErrorMessage message={rolesError} />}
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -114,7 +114,7 @@ export default function SignupPage() {
           <div>
             <h3 className="text-green-800 font-semibold mb-2">Select Roles:</h3>
             {rolesLoading ? (
-              <Loader message="Loading roles..." />
+              <DLoader message="Loading roles..." />
             ) : (
               <div className="grid grid-cols-2 gap-2">
                 {roles?.map((role) => (

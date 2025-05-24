@@ -4,9 +4,9 @@ import React from "react";
 import { useResources } from "../../hooks/useResources";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../lib/api";
-import Loader from "../../components/Loader";
 import ErrorMessage from "../../components/ErrorMessage";
 import Hero from "@/components/Hero";
+import DLoader from "@/components/DataLoader";
 
 export default function ResourcesPage() {
   const { data, loading, error } = useResources();
@@ -21,7 +21,7 @@ export default function ResourcesPage() {
     }
   };
 
-  if (loading) return <Loader />;
+  if (loading) return <DLoader />;
   if (error) return <ErrorMessage message={error} />;
 
   return (

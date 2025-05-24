@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Loader from "../../../components/Loader";
 import ErrorMessage from "../../../components/ErrorMessage";
 import api from "../../../lib/api";
 import { Card, CardHeader, CardBody, CardFooter } from "@/components/ui/ReusableCard";
@@ -10,6 +9,7 @@ import { ArrowLeft } from "lucide-react";
 import { Patient } from "@/hooks/useDashboardStats";
 import { useAuth } from "@/context/AuthContext";
 import { useAppointments } from "@/hooks/useAppointments";
+import DLoader from "@/components/DataLoader";
 
 export default function MyAppointments() {
   const [loading, setLoading] = useState(true);
@@ -38,7 +38,7 @@ export default function MyAppointments() {
       </span>
       <h1 className="text-2xl font-bold text-green-800 mb-4">My Appointments</h1>
       {loading ? (
-        <Loader message="Loading appointments..." />
+        <DLoader message="Loading appointments..." />
       ) : error ? (
         <ErrorMessage message={error} />
       ) : appointments?.length === 0 ? (

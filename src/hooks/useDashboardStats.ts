@@ -76,12 +76,14 @@ export const useDashboardStats = () => {
           "/dashboard/resources-breakdown"
         );
 
-        const profile = await api.get(`/therapists-profiles/${user?.userId}`);
-        if (profile.data.message === "NO FOUND") {
-          setTherapistProfile(null);
-          console.log("[ERROR]: Therapist profile not found");
-        } else {
-          setTherapistProfile(profile.data);
+        if(user?.role.includes("THERAPIST")){
+          const profile = await api.get(`/therapists-profiles/${user?.userId}`);
+          if (profile.data.message === "NO FOUND") {
+            setTherapistProfile(null);
+            console.log("[ERROR]: Therapist profile not found");
+          } else {
+            setTherapistProfile(profile.data);
+          }
         }
 
         // Convert { articles: 5, guides: 4, exercises: 2 } →

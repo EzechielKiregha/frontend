@@ -3,10 +3,10 @@
 import React, { useState } from "react";
 import RequireAuth from "../../components/RequireAuth";
 import { useAppointments } from "../../hooks/useAppointments";
-import Loader from "../../components/Loader";
 import ErrorMessage from "../../components/ErrorMessage";
 import Hero from "@/components/Hero";
 import AlertDialog from "@/components/ui/AlertDialog";
+import DLoader from "@/components/DataLoader";
 
 export default function AppointmentPage() {
   const { appointments, error, bookAppointment, updateAppointmentStatus } = useAppointments();
@@ -20,7 +20,7 @@ export default function AppointmentPage() {
     }
   };
 
-  if (!appointments) return <Loader />;
+  if (!appointments) return <DLoader />;
   if (error) return <ErrorMessage message="Failed to load appointments." />;
 
   return (

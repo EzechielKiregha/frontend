@@ -1,7 +1,7 @@
 "use client";
 
+import DLoader from "@/components/DataLoader";
 import ErrorMessage from "@/components/ErrorMessage";
-import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/api";
@@ -55,7 +55,7 @@ export default function NewContactLine() {
           </a>
         </span>
         <h1 className="text-green-800 text-2xl font-bold mb-4">Add Emergency Contact Line</h1>
-        {loading && <Loader />}
+        {loading && <DLoader />}
         {error && <ErrorMessage message={error} />}
         <form onSubmit={handleSubmit} className="space-y-4">
           <input

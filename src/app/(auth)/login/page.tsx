@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { useRouter } from "next/navigation";
-import Loader from "../../../components/Loader";
 import ErrorMessage from "../../../components/ErrorMessage";
 import Button from "../../../components/Button";
 import BasePopover from "../../../components/BasePopover";
@@ -14,6 +13,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import api from "@/lib/api";
+import DLoader from "@/components/DataLoader";
 
 export default function LoginPage() {
   const { user, login, verifyOtp } = useAuth();
@@ -74,7 +74,7 @@ export default function LoginPage() {
       </div>
       <div className="bg-white border border-green-600 rounded-lg p-8 shadow-lg">
         <h1 className="text-green-800 text-2xl font-bold mb-4">Log In</h1>
-        {loading && <Loader />}
+        {loading && <DLoader />}
         {error && <ErrorMessage message={error} />}
         <form onSubmit={handleLogin} className="space-y-4">
           <input
@@ -119,7 +119,7 @@ export default function LoginPage() {
           <p className="text-gray-800 mb-4">
             Enter the 6-digit code sent to your email.
           </p>
-          {loading && <Loader />}
+          {loading && <DLoader />}
           {error && <ErrorMessage message={error} />}
           <InputOTP
             maxLength={6}

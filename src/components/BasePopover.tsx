@@ -11,6 +11,7 @@ interface PopoverProps {
   buttonLabel?: string;
   isOpen?: boolean;
   onClose?: () => void;
+  onClick?: () => void;
 }
 
 export default function BasePopover({
