@@ -1,18 +1,28 @@
 "use client";
-import React from "react";
+
+import React, { useState } from "react";
 import { useTherapistProfiles } from "../../hooks/useTherapistProfiles";
 import { useAuth } from "../../context/AuthContext";
 import Loader from "../../components/Loader";
 import ErrorMessage from "../../components/ErrorMessage";
-import Hero from "@/components/Hero";
-import AlertDialog from "@/components/ui/AlertDialog";
-import { useRouter } from "next/navigation";
+import { Card, CardHeader, CardBody, CardFooter } from "@/components/ui/ReusableCard";
+import { Button } from "@/components/ui/button";
+import BasePopover from "@/components/BasePopover";
+import { DatePickerWithPresets } from "@/components/ui/DatePickerWithPresets";
 import api from "@/lib/api";
+import { useRouter } from "next/navigation";
+import { useDashboardStats } from "@/hooks/useDashboardStats";
+import Hero from "@/components/Hero";
 
 export default function TherapistsPage() {
-  const { profiles, therapists, loading, error } = useTherapistProfiles();
+  const { therapistsData, loading, error } = useDashboardStats();
+
   const { user } = useAuth();
   const router = useRouter();
+  const [selectedTherapist, setSelectedTherapist] = useState<number | null>(null);
+  const [appointmentDate, setAppointmentDate] = useState<Date | null>(null);
+  const [loadingBooking, setLoadingBooking] = useState(false);
+  const [errorBooking, setErrorBooking] = useState<string | null>(null);
 
   const handleStartChat = async (therapistId: number) => {
     try {
@@ -24,48 +34,93 @@ export default function TherapistsPage() {
     }
   };
 
+  const handleBookAppointment = async () => {
+    if (!selectedTherapist || !appointmentDate) {
+      setErrorBooking("Please select a therapist and a date.");
+      return;
+    }
+    setLoadingBooking(true);
+    setErrorBooking(null);
+    try {
+      await api.post(`/appointments/book`, {
+        therapistId: selectedTherapist,
+        appointmentTime: appointmentDate.toISOString(),
+      });
+      alert("Appointment booked successfully!");
+      setSelectedTherapist(null);
+      setAppointmentDate(null);
+    } catch (err) {
+      setErrorBooking("Failed to book appointment. Please try again.");
+    } finally {
+      setLoadingBooking(false);
+    }
+  };
+
   if (loading) return <Loader />;
   if (error) return <ErrorMessage message={error} />;
 
   return (
     <>
       <Hero
-        title="Therapists"
-        subtitle="Find the right therapist for you."
-        imageSrc="/images/Blog-article_banner-image.png"
-        reverse={true}
-        ctaText="Read about our therapists"
-        ctaLink="/therapists/#therapist"
-      />
-      <div id="therapist" className="container mx-auto px-4 py-8">
+        title="Mental Health Therapist & Appointments"
+        subtitle="Book and manage your mental health appointments easily."
+        imageSrc="/images/Mental-Health-consultation.jpg"
+        reverse={false}
+        ctaText="Start Chat 0r Book Appointment"
+        ctaLink="/therapists/#thera" />
+      <div id="thera" className="container mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold text-green-800 mb-4">Therapists</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {therapists?.map((therapist) => {
-            const profile = profiles?.find((p) => p.userId === therapist.id);
+          {therapistsData?.map((therapist) => {
             return (
-              <div key={therapist.id} className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm">
-                <img
-                  src={"/images/eze.jpg"} //profile?.photoUrl ||
-                  alt={therapist.firstName}
-                  className="w-full h-48 object-cover rounded-md mb-4"
-                />
-                <h2 className="text-lg font-bold text-green-800">{therapist.firstName} {therapist.lastName}</h2>
-                <p className="text-sm text-gray-600">{profile?.specialty || "Specialty not available"}</p>
-                <p className="mt-2 text-gray-800">{profile?.bio || "No bio available"}</p>
-                <AlertDialog
-                  title="Start Chat"
-                  description={`Are you sure you want to start a chat session with ${therapist.firstName} ${therapist.lastName}?`}
-                  onConfirm={() => handleStartChat(therapist.id)}
-                >
-                  <button className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white rounded py-2">
+              <Card key={therapist.id} className="bg-green-50 border border-green-600 shadow-lg">
+                <CardHeader>
+                  <div className="flex items-center space-x-4">
+                    <img
+                      src={therapist?.therapistProfile.photoUrl || "/images/eze.jpg"}
+                      alt={`${therapist.firstName} ${therapist.lastName}`}
+                      className="w-16 h-16 rounded-full border border-green-600" />
+                    <div>
+                      <h2 className="text-lg font-bold text-green-800">{therapist.firstName} {therapist.lastName}</h2>
+                      <p className="text-sm text-gray-600">{therapist?.therapistProfile?.specialty || "Specialty not available"}</p>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardBody>
+                  <p className="text-gray-800">{therapist?.therapistProfile?.bio || "No bio available"}</p>
+                </CardBody>
+                <CardFooter className="flex flex-col gap-2">
+                  <Button
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                    onClick={() => handleStartChat(therapist.id)}
+                  >
                     Chat
-                  </button>
-                </AlertDialog>
-              </div>
+                  </Button>
+                  <BasePopover
+                    title="Book Appointment"
+                    buttonLabel="Book Appointment"
+                  >
+                    <form className="space-y-4">
+                      {errorBooking && <p className="text-red-600">{errorBooking}</p>}
+                      <DatePickerWithPresets
+                        onDateChange={(date) => setAppointmentDate(date)} />
+                      <Button
+                        className="w-full bg-green-600 hover:bg-green-700 text-white"
+                        onClick={() => {
+                          setSelectedTherapist(therapist.id);
+                          handleBookAppointment();
+                        }}
+                        disabled={loadingBooking}
+                      >
+                        {loadingBooking ? "Booking..." : "Confirm"}
+                      </Button>
+                    </form>
+                  </BasePopover>
+                </CardFooter>
+              </Card>
             );
           })}
         </div>
-      </div >
-    </>
+      </div></>
   );
 }

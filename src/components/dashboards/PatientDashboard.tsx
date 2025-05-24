@@ -7,16 +7,11 @@ import ErrorMessage from "../ErrorMessage";
 import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
 
-
-
 export default function PatientDashboard() {
-  const { patientData, stats, loading, error } = useDashboardStats();
-
+  const { patientData, loading, error } = useDashboardStats();
 
   if (loading) return <Loader />;
   if (error) return <ErrorMessage message={error} />;
-
-
 
   const handleConfirmAppointment = () => {
     console.log("Appointment confirmed!");
@@ -29,38 +24,37 @@ export default function PatientDashboard() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-green-800 mb-4">Patient Dashboard</h1>
-
-      {/* Profile Section */}
-      <div className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm mb-8">
-        <h2 className="text-lg font-bold text-green-800">Your Profile</h2>
-        <img
-          src="/images/eze.jpg"
-          alt="User Avatar"
-          className="w-12 h-12 rounded-full"
-        />
-        <p className="text-gray-800">Name: {patientData?.firstName} {patientData?.lastName}</p>
-        <p className="text-gray-800">Email:  {patientData?.email}</p>
-        <Button className="mt-4 bg-green-600 hover:bg-green-700 text-white">
-          Update Profile
-        </Button>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+        {/* Profile Section */}
+        <div className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm">
+          <h2 className="text-lg font-bold text-green-800">Your Profile</h2>
+          <img
+            src="/images/eze.jpg"
+            alt="User Avatar"
+            className="w-12 h-12 rounded-full"
+          />
+          <p className="text-gray-800">Name: {patientData?.firstName} {patientData?.lastName}</p>
+          <p className="text-gray-800">Email:  {patientData?.email}</p>
+          <Button className="mt-4 bg-green-600 hover:bg-green-700 text-white">
+            Update Profile
+          </Button>
+        </div>
+        {/* Quick Links */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <a href="/self-check" className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm text-center hover:bg-green-100">
+            <h2 className="text-lg font-bold text-green-800">Self-Check</h2>
+          </a>
+          <a href="/resources" className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm text-center hover:bg-green-100">
+            <h2 className="text-lg font-bold text-green-800">Recommended Resources</h2>
+          </a>
+          <a href="/appointment" className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm text-center hover:bg-green-100">
+            <h2 className="text-lg font-bold text-green-800">Appointments</h2>
+          </a>
+          <a href="/therapists" className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm text-center hover:bg-green-100">
+            <h2 className="text-lg font-bold text-green-800">Therapists</h2>
+          </a>
+        </div>
       </div>
-
-      {/* Quick Links */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <a href="/self-check" className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm text-center hover:bg-green-100">
-          <h2 className="text-lg font-bold text-green-800">Self-Check</h2>
-        </a>
-        <a href="/resources" className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm text-center hover:bg-green-100">
-          <h2 className="text-lg font-bold text-green-800">Recommended Resources</h2>
-        </a>
-        <a href="/appointment" className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm text-center hover:bg-green-100">
-          <h2 className="text-lg font-bold text-green-800">Appointments</h2>
-        </a>
-        <a href="/therapists" className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm text-center hover:bg-green-100">
-          <h2 className="text-lg font-bold text-green-800">Therapists</h2>
-        </a>
-      </div>
-
       {/* Appointment Confirmation */}
       <div className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm">
         <h2 className="text-lg font-bold text-green-800 mb-4">Upcoming Appointment</h2>

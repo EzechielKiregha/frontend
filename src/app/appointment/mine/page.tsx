@@ -1,29 +1,32 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import DynamicTable from "../../../components/tables/DynamicTable";
 import Loader from "../../../components/Loader";
+import ErrorMessage from "../../../components/ErrorMessage";
 import api from "../../../lib/api";
+import { Card, CardHeader, CardBody, CardFooter } from "@/components/ui/ReusableCard";
+import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-
-const columns = [
-  { id: "id", label: "ID" },
-  { id: "patient", label: "Patient" },
-  { id: "date", label: "Date" },
-  { id: "status", label: "Status" },
-];
+import { Patient } from "@/hooks/useDashboardStats";
+import { useAuth } from "@/context/AuthContext";
+import { useAppointments } from "@/hooks/useAppointments";
 
 export default function MyAppointments() {
-  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { user } = useAuth();
+  const { appointments, bookAppointment, updateAppointmentStatus } = useAppointments();
 
-  useEffect(() => {
-    api.get("/appointments/mine")
-      .then((response) => {
-        setData(response.data);
-      })
-      .finally(() => setLoading(false));
-  }, []);
+
+  const handleCancel = async (id: number) => {
+    try {
+      await api.delete(`/appointments/${id}`);
+
+      alert("Appointment canceled successfully.");
+    } catch {
+      alert("Failed to cancel appointment. Please try again.");
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -36,8 +39,49 @@ export default function MyAppointments() {
       <h1 className="text-2xl font-bold text-green-800 mb-4">My Appointments</h1>
       {loading ? (
         <Loader message="Loading appointments..." />
+      ) : error ? (
+        <ErrorMessage message={error} />
+      ) : appointments?.length === 0 ? (
+        <p className="text-gray-800">You have no appointments.</p>
       ) : (
-        <DynamicTable columns={columns} data={data} title="Appointments" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {appointments?.map((appointment) => (
+            <Card key={appointment.id} className="bg-green-50 border border-green-600 shadow-lg">
+              <CardHeader>
+                <h2 className="text-lg font-bold text-green-800">Appointment</h2>
+              </CardHeader>
+              <CardBody>
+                <p className="text-gray-800">
+                  <span className="font-semibold">Date:</span> {appointment.date}
+                </p>
+                <p className="text-gray-800">
+                  <span className="font-semibold">Time:</span> {appointment.time}
+                </p>
+                <p className="text-gray-800">
+                  user?.role.includes("PATIENT") ? (
+                  <span className="font-semibold">Therapist:</span> {appointment.therapist.firstName} {appointment.therapist.lastName}
+                  ):(
+                  <span className="font-semibold">Patient:</span> {appointment.user.firstName} {appointment.user.lastName}
+                  )
+                </p>
+                <p className="text-gray-800">
+                  <span className="font-semibold">Status:</span> {appointment.status}
+                </p>
+              </CardBody>
+              <CardFooter>
+                {appointment.status === "SCHEDULED" && (
+                  <Button
+                    variant="outline"
+                    className="text-red-600 border-red-600"
+                    onClick={() => handleCancel(appointment.id)}
+                  >
+                    Cancel Appointment
+                  </Button>
+                )}
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
       )}
     </div>
   );

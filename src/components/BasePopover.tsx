@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useId } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 import { ArrowLeftIcon } from 'lucide-react';
 
@@ -17,19 +17,35 @@ export default function BasePopover({
   title,
   children,
   buttonLabel = 'Open',
-  isOpen = false,
+  isOpen: controlledIsOpen,
   onClose,
 }: PopoverProps) {
   const uniqueId = useId();
+  const [isOpen, setIsOpen] = useState(controlledIsOpen || false);
+
+  // Sync controlled `isOpen` prop with internal state
+  useEffect(() => {
+    if (controlledIsOpen !== undefined) {
+      setIsOpen(controlledIsOpen);
+    }
+  }, [controlledIsOpen]);
 
   // Close popover with Escape key
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && onClose) onClose();
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+        if (onClose) onClose();
+      }
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
+    if (!isOpen && onClose) onClose();
+  };
 
   return (
     <MotionConfig transition={TRANSITION}>
@@ -39,7 +55,7 @@ export default function BasePopover({
           key="button"
           className="relative group"
           layoutId={`popover-${uniqueId}`}
-          onClick={() => onClose && onClose()}
+          onClick={handleToggle}
         >
           <motion.span
             layoutId={`popover-label-${uniqueId}`}
@@ -69,7 +85,10 @@ export default function BasePopover({
                 {/* Header */}
                 <div className="flex items-center p-4 border-b border-gray-200">
                   <button
-                    onClick={() => onClose && onClose()}
+                    onClick={() => {
+                      setIsOpen(false);
+                      if (onClose) onClose();
+                    }}
                     className="flex items-center text-green-600 hover:text-green-500"
                   >
                     <ArrowLeftIcon size={20} className="mr-2" /> Back
