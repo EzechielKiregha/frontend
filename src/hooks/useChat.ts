@@ -65,5 +65,5 @@ export const useChat = (sessionId: ParamValue) => {
     }
   }
 
-  return {chatSessions, messages, sendMessage, error };
+  return {chatSessions, userChatSessions, messages, sendMessage, error };
 };

@@ -75,8 +75,8 @@ export default function PatientDashboard() {
           <a href="/resources" className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm text-center hover:bg-green-100">
             <h2 className="text-lg font-bold text-green-800">Recommended Resources</h2>
           </a>
-          <a href="/dashboard" className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm text-center hover:bg-green-100">
-            <h2 className="text-lg font-bold text-green-800">Appointments</h2>
+          <a href="/chat" className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm text-center hover:bg-green-100">
+            <h2 className="text-lg font-bold text-green-800">Your Recent Chats</h2>
           </a>
           <a href="/therapists" className="bg-green-50 border border-green-600 rounded-lg p-4 shadow-sm text-center hover:bg-green-100">
             <h2 className="text-lg font-bold text-green-800">Therapists</h2>

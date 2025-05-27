@@ -12,20 +12,21 @@ export default function ChatPage() {
   const { user } = useAuth();
   const [sessionId, setSessionId] = useState<ParamValue>();
   const [message, setMessage] = useState("");
-  const { chatSessions, messages, sendMessage, error } = useChat(sessionId);
+  const { chatSessions, userChatSessions, messages, sendMessage, error } = useChat(sessionId);
 
   useEffect(() => {
-    const startChat = async () => {
-      try {
-        const response = await api.post("/chat/start", { userId: user?.userId });
-        setSessionId(response.data.sessionId);
-      } catch (err) {
-        console.error("Failed to start chat:", err);
-      }
-    };
+    if (user) userChatSessions(user.userId);
 
-    if (user) startChat();
   }, [user]);
+
+  const startChat = async () => {
+    try {
+      const response = await api.post("/chat/start", { userId: user?.userId });
+      setSessionId(response.data.sessionId);
+    } catch (err) {
+      console.error("Failed to start chat:", err);
+    }
+  };
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,10 +49,10 @@ export default function ChatPage() {
           </div>
         ) : (
           <div>
-            {chatSessions.map((chat) => (
-              <div key={chat.id} className="mb-2">
-                <strong className="text-green-800">From : {chat.user.firstName}:</strong>{" "}
-                <span className="text-gray-800">To : {chat.therapist.firstName}</span>
+            {chatSessions?.map((chat) => (
+              <div key={chat?.id} className="mb-2">
+                <strong className="text-green-800">From : {chat?.user?.firstName}:</strong>{" "}
+                <span className="text-gray-800">To : {chat?.therapist?.firstName}</span>
               </div>
             ))}
           </div>

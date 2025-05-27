@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, use } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/api";
 import ErrorMessage from "@/components/ErrorMessage";
 import { useAuth } from "@/context/AuthContext";
@@ -17,12 +17,12 @@ interface Message {
 export default function ChatSessionPage() {
   const { chatSessionId } = useParams();
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [nodMsg, setNoMsg] = useState<string | null>(null)
   const [messages, setMessages] = useState<Message[]>([]);
-  const [sendFrom, setSentFrom] = useState<sender>()
   const { user } = useAuth()
+  const router = useRouter();
 
   useEffect(() => {
     if (!chatSessionId) {
@@ -36,6 +36,8 @@ export default function ChatSessionPage() {
   }, [chatSessionId]);
 
   const fetchMessages = async () => {
+    setLoading(true);
+    setError(null);
     try {
       const response = await api.get(`/chat/${chatSessionId}`);
       if (response.status === 404) {
@@ -51,31 +53,20 @@ export default function ChatSessionPage() {
     }
   };
 
-  enum sender {
-    "PATIENT",
-    "THERAPIST"
-  }
-
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (user && user.role.includes("PATIENT") && !user.role.includes("THERAPIST")) {
-      setSentFrom(sender.PATIENT)
-    } else if (user && user.role.includes("THERAPIST")) { setSentFrom(sender.THERAPIST) }
-    else {
-      setError("Sorry You Can't Send Message")
-    }
     if (message.trim()) {
       try {
         const res = await api.post(`/chat/${chatSessionId}/message`, null, {
           params: {
-            sender: sendFrom,
+            sender: `${user && user.role.includes("PATIENT") && !user.role.includes("THERAPIST") ? "PATIENT" : "THERAPIST"}`,
             text: message
           }
         }
         );
         setLoading(false)
         setMessage("");
+        fetchMessages();
       } catch (err) {
         console.error("Failed to send message:", err);
       }

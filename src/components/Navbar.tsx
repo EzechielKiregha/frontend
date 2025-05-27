@@ -18,7 +18,7 @@ const Navbar = () => {
   const { patientData } = useDashboardStats();
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-green-600 text-white p-4 shadow-md">
+    <nav className="sticky top-0 z-50 w-full bg-green-700 text-white p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center">
@@ -91,7 +91,7 @@ const Navbar = () => {
             </DropdownMenu>
           ) : (
             <Link
-              className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+              className="bg-white text-green-600 hover:underline hover:underline-offset-4 transition-all duration-300"
               href="/login">
               Get Started
             </Link>
@@ -109,7 +109,7 @@ const Navbar = () => {
             <DropdownMenuContent className="w-56">
               <DropdownMenuItem>
                 <Link
-                  className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+                  className="text-green-800 hover:underline hover:underline-offset-4 transition-all duration-300"
                   href="/">
                   Home
                 </Link>
@@ -117,7 +117,7 @@ const Navbar = () => {
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Link
-                  className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+                  className="text-green-800 hover:underline hover:underline-offset-4 transition-all duration-300"
                   href="/therapists">
                   Therapists
                 </Link>
@@ -125,7 +125,7 @@ const Navbar = () => {
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Link
-                  className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+                  className="text-green-800 hover:underline hover:underline-offset-4 transition-all duration-300"
                   href="/self-check">
                   Self-Check
                 </Link>
@@ -133,7 +133,7 @@ const Navbar = () => {
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Link
-                  className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+                  className="text-green-800 hover:underline hover:underline-offset-4 transition-all duration-300"
                   href="/resources">
                   Resources
                 </Link>
@@ -142,7 +142,7 @@ const Navbar = () => {
                 <>
                   <DropdownMenuItem>
                     <Link
-                      className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+                      className="text-green-800 hover:underline hover:underline-offset-4 transition-all duration-300"
                       href="/dashboard">
                       Dashboard
                     </Link>
@@ -150,7 +150,7 @@ const Navbar = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Link
-                      className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+                      className="text-green-800 hover:underline hover:underline-offset-4 transition-all duration-300"
                       href="/dashboard/#">
                       Settings
                     </Link>
