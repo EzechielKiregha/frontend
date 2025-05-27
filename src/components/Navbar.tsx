@@ -13,11 +13,7 @@ import { Button } from "./ui/button";
 import { useDashboardStats } from "@/hooks/useDashboardStats";
 import Link from "next/link";
 
-interface NavbarProps {
-  handleNavigation: (href: string) => void;
-}
-
-const Navbar: React.FC<NavbarProps> = ({ handleNavigation }) => {
+const Navbar = () => {
   const { user, otpRequired, logout } = useAuth();
   const { patientData } = useDashboardStats();
 
@@ -36,18 +32,27 @@ const Navbar: React.FC<NavbarProps> = ({ handleNavigation }) => {
 
         {/* Desktop Links */}
         <div className="hidden md:flex gap-4 items-center">
-          <Button variant="link" onClick={() => handleNavigation("/")} className="hover:underline hover:underline-offset-4 text-white transition-all duration-300">
+          <Link
+            className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+            href="/">
             Home
-          </Button>
-          <Button variant="link" onClick={() => handleNavigation("/therapists")} className="hover:underline hover:underline-offset-4 text-white transition-all duration-300">
+          </Link>
+          <Link
+            className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+            href="/therapists">
             Therapists
-          </Button>
-          <Button variant="link" onClick={() => handleNavigation("/self-check")} className="hover:underline hover:underline-offset-4 text-white transition-all duration-300">
+          </Link>
+          <Link
+            className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+            href="/self-check">
             Self-Check
-          </Button>
-          <Button variant="link" onClick={() => handleNavigation("/resources")} className="hover:underline hover:underline-offset-4 text-white transition-all duration-300">
+          </Link>
+          <Link
+            className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+            href="/resources">
             Resources
-          </Button>
+          </Link>
+
           {user && !otpRequired ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -64,14 +69,19 @@ const Navbar: React.FC<NavbarProps> = ({ handleNavigation }) => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-48">
                 <DropdownMenuItem>
-                  <Button variant="link" onClick={() => handleNavigation("/dashboard")} className="text-green-800 hover:underline hover:underline-offset-4 transition-all duration-300">
+                  <Link
+                    className="text-green-800 hover:underline hover:underline-offset-4 transition-all duration-300"
+                    href="/dashboard">
                     Dashboard
-                  </Button>
+                  </Link>
+
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Button variant="link" onClick={() => handleNavigation("/settings")} className="text-green-800 hover:underline hover:underline-offset-4 transition-all duration-300">
+                  <Link
+                    className="text-green-800 hover:underline hover:underline-offset-4 transition-all duration-300"
+                    href="/dashboard/#">
                     Settings
-                  </Button>
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout} className="text-red-600 hover:underline hover:underline-offset-4 transition-all duration-300">
@@ -80,12 +90,11 @@ const Navbar: React.FC<NavbarProps> = ({ handleNavigation }) => {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button
-              onClick={() => handleNavigation("/login")}
-              className="bg-white text-green-600 px-2 py-1 rounded hover:bg-gray-200"
-            >
+            <Link
+              className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+              href="/login">
               Get Started
-            </Button>
+            </Link>
           )}
         </div>
 
@@ -99,39 +108,52 @@ const Navbar: React.FC<NavbarProps> = ({ handleNavigation }) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               <DropdownMenuItem>
-                <Button variant="link" onClick={() => handleNavigation("/")} className="hover:underline hover:underline-offset-4 text-green-900 transition-all duration-300">
+                <Link
+                  className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+                  href="/">
                   Home
-                </Button>
+                </Link>
 
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Button variant="link" onClick={() => handleNavigation("/therapists")} className="hover:underline hover:underline-offset-4 text-green-900 transition-all duration-300">
+                <Link
+                  className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+                  href="/therapists">
                   Therapists
-                </Button>
+                </Link>
 
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Button variant="link" onClick={() => handleNavigation("/self-check")} className="hover:underline hover:underline-offset-4 text-green-900 transition-all duration-300">
+                <Link
+                  className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+                  href="/self-check">
                   Self-Check
-                </Button>
+                </Link>
 
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Button variant="link" onClick={() => handleNavigation("/resources")} className="hover:underline hover:underline-offset-4 text-green-900 transition-all duration-300">
+                <Link
+                  className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+                  href="/resources">
                   Resources
-                </Button>
+                </Link>
               </DropdownMenuItem>
               {user && !otpRequired ? (
                 <>
                   <DropdownMenuItem>
-                    <Button variant="link" onClick={() => handleNavigation("/dashboard")} className="text-green-800 hover:underline hover:underline-offset-4 transition-all duration-300">
+                    <Link
+                      className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+                      href="/dashboard">
                       Dashboard
-                    </Button>
+                    </Link>
+
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Button variant="link" onClick={() => handleNavigation("/settings")} className="text-green-800 hover:underline hover:underline-offset-4 transition-all duration-300">
+                    <Link
+                      className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+                      href="/dashboard/#">
                       Settings
-                    </Button>
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={logout} className="text-red-600 hover:underline hover:underline-offset-4 transition-all duration-300">
@@ -140,12 +162,11 @@ const Navbar: React.FC<NavbarProps> = ({ handleNavigation }) => {
                 </>
               ) : (
                 <DropdownMenuItem>
-                  <Button
-                    onClick={() => handleNavigation("/login")}
-                    className="bg-white text-green-600 px-2 py-1 rounded hover:bg-gray-200"
-                  >
+                  <Link
+                    className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
+                    href="/login">
                     Get Started
-                  </Button>
+                  </Link>
                 </DropdownMenuItem>
               )}
             </DropdownMenuContent>

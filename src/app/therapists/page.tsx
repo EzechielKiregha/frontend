@@ -81,11 +81,11 @@ export default function TherapistsPage() {
                 <CardHeader>
                   <div className="flex items-center space-x-4">
                     <img
-                      src={therapist?.therapistProfile.photoUrl || "/images/eze.jpg"}
-                      alt={`${therapist.firstName} ${therapist.lastName}`}
+                      src={therapist?.therapistProfile?.photoUrl || "/images/eze.jpg"}
+                      alt={`${therapist?.firstName} ${therapist?.lastName}`}
                       className="w-16 h-16 rounded-full border border-green-600" />
                     <div>
-                      <h2 className="text-lg font-bold text-green-800">{therapist.firstName} {therapist.lastName}</h2>
+                      <h2 className="text-lg font-bold text-green-800">{therapist?.firstName} {therapist?.lastName}</h2>
                       <p className="text-sm text-gray-600">{therapist?.therapistProfile?.specialty || "Specialty not available"}</p>
                     </div>
                   </div>
@@ -111,16 +111,16 @@ export default function TherapistsPage() {
                       {errorBooking && <p className="text-red-600">{errorBooking}</p>}
                       <DatePickerWithPresets
                         onDateChange={(date) => {
-                          setSelectedTherapist(therapist.id)
+                          setSelectedTherapist(therapist?.id)
                           setAppointmentDate(date)
                         }} />
                       <div className="flex items-center space-x-4">
                         <img
-                          src={therapist?.therapistProfile.photoUrl || "/images/eze.jpg"}
-                          alt={`${therapist.firstName} ${therapist.lastName}`}
+                          src={therapist?.therapistProfile?.photoUrl || "/images/eze.jpg"}
+                          alt={`${therapist?.firstName} ${therapist?.lastName}`}
                           className="w-16 h-16 rounded-full border border-green-600" />
                         <div>
-                          <h2 className="text-lg font-bold text-green-800">{therapist.firstName} {therapist.lastName}</h2>
+                          <h2 className="text-lg font-bold text-green-800">{therapist?.firstName} {therapist?.lastName}</h2>
                           <p className="text-sm text-gray-600">Select a date and book now ...</p>
                         </div>
                       </div>

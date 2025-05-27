@@ -15,7 +15,7 @@ export default function DashboardPage() {
 
   if (user.role.includes("THERAPIST")) {
     return <TherapistDashboard />;
-  } else if (user.role.includes("MANAGER")) {
+    // } else if (user.role.includes("MANAGER")) {
     //   return <ManagerDashboard />;
     // } else if (user.role.includes("ADMIN")) {
     //   return <AdminDashboard />;

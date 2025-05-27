@@ -7,7 +7,6 @@ import ErrorMessage from "@/components/ErrorMessage";
 import { useAuth } from "@/context/AuthContext";
 import DLoader from "@/components/DataLoader";
 
-
 interface Message {
   id: string;
   sender: string;
@@ -26,8 +25,13 @@ export default function ChatSessionPage() {
   const { user } = useAuth()
 
   useEffect(() => {
-
-    const interval = setInterval(fetchMessages, 3000);
+    if (!chatSessionId) {
+      setError("Chat session ID is required.");
+      setLoading(false);
+      return;
+    }
+    fetchMessages();
+    const interval = setInterval(fetchMessages, 120000); // Changed from 3000ms (3 seconds) to 120000ms (2 minutes)
     return () => clearInterval(interval);
   }, [chatSessionId]);
 
@@ -40,9 +44,10 @@ export default function ChatSessionPage() {
         setError("Fetch Error:" + response.data.message)
       } else
         setMessages(response.data);
-      // if (user) userChatSessions(user.userId)
     } catch (err) {
       setError("Failed to fetch messages.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -77,7 +82,13 @@ export default function ChatSessionPage() {
     }
   };
 
-  if (loading) return <DLoader />;
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black/20 z-50">
+        <DLoader message="Loading page…" />
+      </div>
+    );
+  }
   if (error) return <ErrorMessage message={error} />;
 
   return (
