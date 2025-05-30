@@ -56,14 +56,7 @@ export const useChat = (sessionId: ParamValue) => {
     }
   };
 
-  const userChatSessions = async (userId : string) => {
-    try {
-      const res = await api.get(`/chat/get-sessions/${userId}`);
-      setChatSessions(res.data)
-    } catch (error) {
-      console.log("[ERROR] : "+ error);
-    }
-  }
+  
 
-  return {chatSessions, userChatSessions, messages, sendMessage, error };
+  return {chatSessions, messages, sendMessage, error };
 };

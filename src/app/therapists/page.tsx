@@ -23,6 +23,8 @@ export default function TherapistsPage() {
   const [appointmentDate, setAppointmentDate] = useState<Date | null>(null);
   const [loadingBooking, setLoadingBooking] = useState(false);
   const [errorBooking, setErrorBooking] = useState<string | null>(null);
+  const [PopoverOpen, setPopoverOpen] = useState(false);
+
 
   const handleStartChat = async (therapistId: number) => {
     try {
@@ -51,12 +53,14 @@ export default function TherapistsPage() {
 
       });
       alert("Appointment booked successfully!");
+      setPopoverOpen(false);
       setSelectedTherapist(null);
       setAppointmentDate(null);
     } catch (err) {
       setErrorBooking("Failed to book appointment. Please try again.");
     } finally {
       setLoadingBooking(false);
+
     }
   };
 
@@ -98,7 +102,6 @@ export default function TherapistsPage() {
                     className="bg-green-600 hover:bg-green-700 text-white"
                     onClick={() => {
                       handleStartChat(therapist.id)
-                      console.log("Therapist ID: " + therapist.id)
                     }}
                   >
                     Chat
@@ -106,6 +109,7 @@ export default function TherapistsPage() {
                   <BasePopover
                     title="Book Appointment"
                     buttonLabel="Book Appointment"
+                    isOpen={PopoverOpen}
                   >
                     <form className="space-y-4">
                       {errorBooking && <p className="text-red-600">{errorBooking}</p>}

@@ -26,21 +26,21 @@ export default function LandingPage() {
           <p className="mt-2 text-gray-700">
             Take a quick quiz to assess your mental well-being.
           </p>
-          <Button className="mt-4">Learn More</Button>
+          <a href="/self-check"><Button className="mt-4 cursor-pointer">Start</Button></a>
         </Card>
         <Card>
           <h2 className="text-green-800 text-lg font-bold">Therapist Directory</h2>
           <p className="mt-2 text-gray-700">
             Find and connect with professional therapists.
           </p>
-          <Button className="mt-4">Learn More</Button>
+          <a href="/therapists"><Button className="mt-4 cursor-pointer">Find & Book a TALK</Button></a>
         </Card>
         <Card>
           <h2 className="text-green-800 text-lg font-bold">Chat & Support</h2>
           <p className="mt-2 text-gray-700">
             Join our community and get the support you need.
           </p>
-          <Button className="mt-4">Learn More</Button>
+          <Button className="mt-4 cursor-pointer">Learn More</Button>
         </Card>
       </div>
 

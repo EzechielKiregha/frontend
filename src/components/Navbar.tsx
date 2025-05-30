@@ -91,9 +91,12 @@ const Navbar = () => {
             </DropdownMenu>
           ) : (
             <Link
-              className="bg-white text-green-600 hover:underline hover:underline-offset-4 transition-all duration-300"
               href="/login">
-              Get Started
+              <Button
+                className="bg-white text-green-600 px-2 py-1 rounded hover:bg-gray-200"
+              >
+                Get Started
+              </Button>
             </Link>
           )}
         </div>
@@ -163,9 +166,12 @@ const Navbar = () => {
               ) : (
                 <DropdownMenuItem>
                   <Link
-                    className="text-white hover:underline hover:underline-offset-4 transition-all duration-300"
                     href="/login">
-                    Get Started
+                    <Button
+                      className="bg-white text-green-600 px-2 py-1 rounded hover:bg-gray-200"
+                    >
+                      Get Started
+                    </Button>
                   </Link>
                 </DropdownMenuItem>
               )}

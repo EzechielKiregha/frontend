@@ -47,10 +47,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const stored = localStorage.getItem('jwtToken');
     if (stored) {
-      const decoded = jwtDecode<DecodedToken>(stored);
-      setUser(decoded as DecodedToken);
-      setToken(stored);
-      setUser(decoded);
+      try {
+        const decoded = jwtDecode<DecodedToken>(stored);
+        setUser(decoded);
+        setToken(stored);
+      } catch (error) {
+        console.error('Invalid token:', error);
+        localStorage.removeItem('jwtToken'); // Remove invalid token
+        setUser(null);
+        setToken(null);
+      }
     }
     setLoading(false);
   }, []);

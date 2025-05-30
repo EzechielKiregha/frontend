@@ -52,10 +52,7 @@ export default function MyAppointments() {
               </CardHeader>
               <CardBody>
                 <p className="text-gray-800">
-                  <span className="font-semibold">Date:</span> {appointment.date}
-                </p>
-                <p className="text-gray-800">
-                  <span className="font-semibold">Time:</span> {appointment.time}
+                  <span className="font-semibold">Time:</span> {appointment.appointmentTime}
                 </p>
                 <p className="text-gray-800">
                   user?.role.includes("PATIENT") ? (

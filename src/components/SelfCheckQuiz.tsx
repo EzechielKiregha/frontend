@@ -24,7 +24,7 @@ export default function SelfCheckQuiz() {
   const [loading, setLoading] = useState(false);
   const [isPopoverOpen, setPopoverOpen] = useState(false);
 
-  const { user } = useAuth(); // Assuming you have a user context
+  const { user } = useAuth();
 
   const handleAnswer = (value: number) => {
     const updatedAnswers = [...answers];
@@ -39,14 +39,17 @@ export default function SelfCheckQuiz() {
       setLoading(true);
       const score = answers.reduce((sum, value) => sum + value, 0);
       const payload = {
-        userId: user?.userId,
         score,
         answers,
         takenAt: new Date().toISOString(),
       };
 
       try {
-        const res = await api.post("/self-check", payload);
+        const res = await api.post("/self-check", payload, {
+          params: {
+            userId: Number(user?.userId)
+          }
+        });
         setRecommendations(res.data.recommendedResourceIds);
         setSubmitted(true);
         setPopoverOpen(true);

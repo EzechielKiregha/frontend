@@ -2,77 +2,67 @@
 
 import React, { useState, useEffect } from "react";
 import api from "../../lib/api";
-import { useChat } from "@/hooks/useChat";
 import { useAuth } from "../../context/AuthContext";
 import ErrorMessage from "../../components/ErrorMessage";
 import { ParamValue } from "next/dist/server/request/params";
 import DLoader from "@/components/DataLoader";
+import { Button } from "@/components/ui/button";
 
 export default function ChatPage() {
   const { user } = useAuth();
   const [sessionId, setSessionId] = useState<ParamValue>();
-  const [message, setMessage] = useState("");
-  const { chatSessions, userChatSessions, messages, sendMessage, error } = useChat(sessionId);
+  const [chatSessions, setChatSessions] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) userChatSessions(user.userId);
-
   }, [user]);
 
-  const startChat = async () => {
+  const userChatSessions = async (userId: string) => {
     try {
-      const response = await api.post("/chat/start", { userId: user?.userId });
-      setSessionId(response.data.sessionId);
-    } catch (err) {
-      console.error("Failed to start chat:", err);
+      const res = await api.get(`/chat/get-sessions/${userId}`);
+      setChatSessions(res.data);
+    } catch (error) {
+      console.log("[ERROR] : " + error);
+      setError("Failed to fetch Chats: " + error);
     }
   };
 
-  const handleSend = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (message.trim()) {
-      await sendMessage(message);
-      setMessage("");
-    }
-  };
-
-  if (!sessionId) return <DLoader />;
+  if (chatSessions.length == 0) return <DLoader />;
   if (error) return <ErrorMessage message={error} />;
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-green-800 mb-4">Chat</h1>
-      <div className="bg-green-50 border border-green-600 rounded-lg p-4 mb-4 h-64 overflow-y-auto">
+      <h1 className="text-2xl font-bold text-green-800 mb-4 ">Chats</h1>
+      <div className="bg-green-50 border border-green-600 rounded-lg p-4 mb-4 h-64 overflow-y-auto shadow-md">
         {chatSessions.length === 0 ? (
-          <div>
+          <div className="text-center">
             <strong className="text-green-800">NO MESSAGE YET:</strong>
           </div>
         ) : (
-          <div>
+          <div className="space-y-2">
             {chatSessions?.map((chat) => (
-              <div key={chat?.id} className="mb-2">
-                <strong className="text-green-800">From : {chat?.user?.firstName}:</strong>{" "}
-                <span className="text-gray-800">To : {chat?.therapist?.firstName}</span>
-              </div>
+              <a
+                key={chat?.id}
+                href={`/chat/${chat?.id}`}
+                className="block p-3 border rounded-lg bg-white hover:bg-gray-100 shadow-sm transition-all duration-200"
+              >
+                <div className="flex justify-between items-center">
+                  <strong className="text-gray-800">To My Therapist:</strong>
+                  <strong className="text-green-800">{chat?.therapist?.firstName} {chat?.therapist?.lastName}</strong>
+                </div>
+              </a>
             ))}
           </div>
         )}
       </div>
-      <div className="bg-green-50 border border-green-600 rounded-lg p-4 mb-4 overflow-y-auto">
-        <strong className="text-green-800">New Chat</strong>
+      <div className="text-center mt-4">
+        <a href="/therapists">
+          <Button variant="link" className="cursor-pointer text-green-800 hover:underline">
+            Here Are Therapist
+          </Button>
+        </a>
       </div>
-      <form onSubmit={handleSend} className="flex gap-2">
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className="flex-1 p-2 border border-gray-300 rounded focus:border-green-600 focus:ring-1 focus:ring-green-600"
-          placeholder="Type a message..."
-        />
-        <button type="submit" className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded">
-          Envoyer
-        </button>
-      </form>
     </div>
   );
 }
